@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { WaterSurface } from "@/components/WaterSurface";
 import { Navbar } from "@/components/Navbar";
 import { Providers } from "@/components/Providers";
+import { clerkAppearance } from "@/lib/clerkAppearance";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -38,15 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${display.variable} ${jetbrains.variable} dark h-full antialiased`}
     >
       <body className="relative flex min-h-full flex-col bg-background font-sans text-foreground">
-        <ClerkProvider
-          appearance={{
-            variables: {
-              colorBackground: "#0a0a0a",
-              colorPrimary: "#f5f5f5",
-              borderRadius: "0.75rem",
-            },
-          }}
-        >
+        <ClerkProvider appearance={clerkAppearance}>
           <Providers>
             <WaterSurface />
             <div className="relative z-10 flex min-h-full flex-1 flex-col">

@@ -1,5 +1,6 @@
 import { SignIn } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { clerkAppearance } from "@/lib/clerkAppearance";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -11,7 +12,11 @@ export default function SignInPage() {
       <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
         BuildStation
       </p>
-      <SignIn />
+      <SignIn
+        appearance={clerkAppearance}
+        signUpUrl="/sign-up"
+        fallbackRedirectUrl="/"
+      />
     </div>
   );
 }

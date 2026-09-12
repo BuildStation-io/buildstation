@@ -1,6 +1,7 @@
 "use client";
 
 import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
+import { clerkAppearance } from "@/lib/clerkAppearance";
 
 export function AuthButtons() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -15,6 +16,7 @@ export function AuthButtons() {
     return (
       <UserButton
         appearance={{
+          ...clerkAppearance,
           elements: {
             avatarBox: "h-8 w-8",
           },
@@ -25,7 +27,7 @@ export function AuthButtons() {
 
   return (
     <div className="flex items-center gap-3">
-      <SignInButton mode="modal">
+      <SignInButton mode="modal" appearance={clerkAppearance}>
         <button
           type="button"
           data-goo-target
@@ -35,12 +37,12 @@ export function AuthButtons() {
           Sign in
         </button>
       </SignInButton>
-      <SignUpButton mode="modal">
+      <SignUpButton mode="modal" appearance={clerkAppearance}>
         <button
           type="button"
           data-goo-target
           data-goo-color="#67e8f9"
-          className="hidden h-9 items-center rounded-full bg-foreground px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-background sm:inline-flex"
+          className="inline-flex h-9 items-center rounded-full bg-foreground px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-background"
         >
           Join
         </button>
