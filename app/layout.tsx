@@ -2,7 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Footer } from "@/components/Footer";
-import { GooCursor } from "@/components/GooCursor";
+import { WaterSurface } from "@/components/WaterSurface";
 import { Navbar } from "@/components/Navbar";
 import { Providers } from "@/components/Providers";
 import "./globals.css";
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${display.variable} ${jetbrains.variable} dark h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+      <body className="relative flex min-h-full flex-col bg-background font-sans text-foreground">
         <ClerkProvider
           appearance={{
             variables: {
@@ -44,10 +44,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         >
           <Providers>
-            <GooCursor />
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
+            <WaterSurface />
+            <div className="relative z-10 flex min-h-full flex-1 flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
           </Providers>
         </ClerkProvider>
       </body>
