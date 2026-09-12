@@ -2,6 +2,8 @@
 
 A network of builders shipping in public. Open-source portfolio inspired by [Crafter Station](https://crafter.run/en/oss) — not a copy.
 
+**Live:** [buildstation-ten.vercel.app](https://buildstation-ten.vercel.app) · **Repo:** [Andy18acaro/buildstation](https://github.com/Andy18acaro/buildstation)
+
 **Stack:** Next.js 16 · Clerk (GitHub login) · Convex · Vercel
 
 ## Local

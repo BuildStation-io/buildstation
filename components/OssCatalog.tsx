@@ -22,7 +22,7 @@ function CatalogView({
         description="These repos across the BuildStation network are maintained and accepting outside contributors: CLIs, design systems, editor tools, and community infrastructure. Pick one and ship."
         primaryHref="#repos"
         primaryLabel="Suggest a project"
-        secondaryHref="https://github.com"
+        secondaryHref="https://github.com/Andy18acaro/buildstation"
         secondaryLabel="Open GitHub org"
         tertiaryHref="#repos"
         tertiaryLabel="See OSS metrics"
