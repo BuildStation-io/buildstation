@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { HeroSculpture } from "@/components/HeroSculpture";
 import { HomeStats } from "@/components/HomeStats";
 
 export default function Home() {
@@ -40,16 +40,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="relative mx-auto aspect-square w-full max-w-md lg:max-w-none">
-          <Image
-            src="/buildstation-hero-mark.png"
-            alt="BuildStation mark"
-            fill
-            priority
-            className="object-contain drop-shadow-[0_30px_80px_rgba(80,140,200,0.18)]"
-            sizes="(min-width: 1024px) 40vw, 80vw"
-          />
-        </div>
+        <HeroSculpture />
       </section>
       <HomeStats />
       <section className="mx-auto w-full max-w-6xl px-5 py-20">
