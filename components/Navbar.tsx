@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { AuthButtons } from "./AuthButtons";
 import { BrandMark } from "./BrandMark";
+import { WhatsAppLink } from "./WhatsAppLink";
+
+const NAV_LINKS = [
+  { href: "/members", label: "Members" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+] as const;
 
 export function Navbar() {
   return (
@@ -15,15 +22,23 @@ export function Navbar() {
           <BrandMark className="h-8 w-8" />
           BuildStation
         </Link>
-        <nav className="flex items-center gap-5">
-          <Link
-            href="/oss"
-            data-goo-target
-            data-goo-color="#67e8f9"
-            className="hidden font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/70 transition-colors hover:text-foreground sm:inline"
-          >
-            Open source
-          </Link>
+        <nav className="flex items-center gap-3 sm:gap-5">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              data-goo-target
+              data-goo-color="#67e8f9"
+              className="font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/70 transition-colors hover:text-foreground sm:text-[11px]"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <WhatsAppLink
+            label=""
+            className="flex h-8 w-8 items-center justify-center rounded-full text-[#25d366] transition-opacity hover:opacity-80"
+            iconClassName="h-4 w-4"
+          />
           <AuthButtons />
         </nav>
       </div>

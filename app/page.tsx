@@ -1,6 +1,25 @@
 import Link from "next/link";
 import { HeroSculpture } from "@/components/HeroSculpture";
 import { HomeStats } from "@/components/HomeStats";
+import { WhatsAppLink } from "@/components/WhatsAppLink";
+
+const CRAFT = [
+  {
+    href: "/projects",
+    title: "Projects",
+    body: "InmoNExo is live. Open features sit on the project card — take one and ship with the group.",
+  },
+  {
+    href: "/members",
+    title: "Members",
+    body: "Sign in. Your name and avatar become part of the network count. No borrowed star charts.",
+  },
+  {
+    href: "/blog",
+    title: "Blog",
+    body: "Posts live as MDX in the repo. Open a PR to publish — no CMS, no admin editor.",
+  },
+] as const;
 
 export default function Home() {
   return (
@@ -14,30 +33,30 @@ export default function Home() {
             The network of builders.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-8 text-muted">
-            A community of shippers, an open-source ecosystem, and a public
-            portfolio of repos you can contribute to. Meet, learn, and build in
-            public.
+            A community of shippers and a public portfolio of our own work.
+            Meet, learn, and build together — starting with InmoNExo.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
-              href="/oss"
+              href="/projects"
               data-goo-target
               data-goo-color="#ffffff"
               className="inline-flex h-11 items-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
             >
-              Browse open source
+              Browse projects
             </Link>
             <Link
-              href="/sign-in"
+              href="/members"
               data-goo-target
               data-goo-color="#67e8f9"
               className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm text-foreground/80 transition-colors hover:text-foreground"
             >
-              Sign in with GitHub
+              See members
               <span className="flex h-8 w-8 items-center justify-center rounded-full border border-line">
                 ↗
               </span>
             </Link>
+            <WhatsAppLink className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm text-foreground/80 transition-colors hover:text-foreground" />
           </div>
         </div>
         <HeroSculpture />
@@ -48,27 +67,18 @@ export default function Home() {
           What we craft
         </p>
         <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight">
-          Open source first. Community next.
+          Our projects. Our members. Our words.
         </h2>
         <div className="mt-12 grid gap-px bg-line sm:grid-cols-3">
-          {[
-            {
-              title: "Open source",
-              body: "A curated directory of repos with live stars, issues, and a path to your first PR.",
-            },
-            {
-              title: "Members",
-              body: "Sign in with GitHub. Your profile, avatar, and handle become part of the network.",
-            },
-            {
-              title: "Ships",
-              body: "The same stack we use in public: Next.js, Clerk, Convex, deployed on Vercel.",
-            },
-          ].map((item) => (
-            <article key={item.title} className="bg-background p-6 sm:p-8">
+          {CRAFT.map((item) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="bg-background p-6 transition-colors hover:bg-surface/60 sm:p-8"
+            >
               <h3 className="text-2xl font-medium tracking-tight">{item.title}</h3>
               <p className="mt-4 text-sm leading-6 text-muted">{item.body}</p>
-            </article>
+            </Link>
           ))}
         </div>
       </section>

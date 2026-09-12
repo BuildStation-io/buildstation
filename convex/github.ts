@@ -16,6 +16,9 @@ export const sync = internalAction({
   returns: v.null(),
   handler: async (ctx) => {
     const repos = await ctx.runQuery(internal.projects.listReposInternal, {});
+    if (repos.length === 0) {
+      return null;
+    }
     const token = process.env.GITHUB_TOKEN;
     const headers: Record<string, string> = {
       Accept: "application/vnd.github+json",

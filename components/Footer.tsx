@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WhatsAppLink } from "./WhatsAppLink";
 
 export function Footer() {
   return (
@@ -11,18 +12,17 @@ export function Footer() {
             Station — not a copy.
           </p>
         </div>
-        <div className="flex flex-wrap gap-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
-          <Link href="/oss" className="hover:text-foreground">
-            Open source
+        <div className="flex flex-wrap items-center gap-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          <Link href="/members" className="hover:text-foreground">
+            Members
           </Link>
-          <a
-            href="https://github.com/BuildStation-io/buildstation"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-foreground"
-          >
-            GitHub
-          </a>
+          <Link href="/projects" className="hover:text-foreground">
+            Projects
+          </Link>
+          <Link href="/blog" className="hover:text-foreground">
+            Blog
+          </Link>
+          <WhatsAppLink className="inline-flex items-center gap-2 hover:text-foreground" />
         </div>
       </div>
       <div className="border-t border-line">

@@ -6,6 +6,7 @@ import { OssHero } from "./OssHero";
 import { ProjectGrid } from "./ProjectGrid";
 import { StatsStrip } from "./StatsStrip";
 import { api } from "@/convex/_generated/api";
+import { WHATSAPP_INVITE } from "@/lib/community";
 import { SEED_PROJECTS, projectStats, type Project } from "@/lib/projects";
 
 function CatalogView({
@@ -13,28 +14,25 @@ function CatalogView({
   stats,
 }: {
   projects: Project[];
-  stats: { stars: number; repos: number; openIssues: number };
+  stats: { members: number; projects: number; openNeeds: number };
 }) {
   return (
     <>
       <OssHero
-        title="Open source, open to contributors."
-        description="These repos across the BuildStation network are maintained and accepting outside contributors: CLIs, design systems, editor tools, and community infrastructure. Pick one and ship."
-        primaryHref="#repos"
-        primaryLabel="Suggest a project"
-        secondaryHref="https://github.com/BuildStation-io"
-        secondaryLabel="Open GitHub org"
-        tertiaryHref="#repos"
-        tertiaryLabel="See OSS metrics"
+        eyebrow="Projects"
+        title="Community projects, not borrowed repos."
+        description="BuildStation ships its own work. InmoNExo is the first live product — market intelligence for Lima developers, with a real backlog you can take."
+        primaryHref="#projects"
+        primaryLabel="See InmoNExo"
+        secondaryHref={WHATSAPP_INVITE}
+        secondaryLabel="Join WhatsApp"
       />
       <StatsStrip
-        stars={stats.stars}
-        repos={stats.repos}
-        openIssues={stats.openIssues}
+        members={stats.members}
+        projects={stats.projects}
+        openNeeds={stats.openNeeds}
       />
-      <div id="repos">
-        <ProjectGrid projects={projects} />
-      </div>
+      <ProjectGrid projects={projects} />
       <ContributeSteps />
     </>
   );
@@ -48,7 +46,7 @@ function LiveCatalog() {
   return <CatalogView projects={projects} stats={stats} />;
 }
 
-export function OssCatalog() {
+export function ProjectsCatalog() {
   if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
     return (
       <CatalogView projects={SEED_PROJECTS} stats={projectStats(SEED_PROJECTS)} />

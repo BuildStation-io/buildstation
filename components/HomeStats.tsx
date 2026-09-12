@@ -9,9 +9,9 @@ function StaticStats() {
   const stats = projectStats(SEED_PROJECTS);
   return (
     <StatsStrip
-      stars={stats.stars}
-      repos={stats.repos}
-      openIssues={stats.openIssues}
+      members={stats.members}
+      projects={stats.projects}
+      openNeeds={stats.openNeeds}
     />
   );
 }
@@ -22,9 +22,9 @@ function LiveStats() {
   const stats = remote ?? fallback;
   return (
     <StatsStrip
-      stars={stats.stars}
-      repos={stats.repos}
-      openIssues={stats.openIssues}
+      members={stats.members}
+      projects={stats.projects}
+      openNeeds={stats.openNeeds}
     />
   );
 }

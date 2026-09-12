@@ -1,86 +1,109 @@
-import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
+import { needValidator } from "./schema";
 import { internalMutation, internalQuery, query } from "./_generated/server";
 
 const projectDoc = v.object({
   _id: v.id("projects"),
   _creationTime: v.number(),
-  githubRepo: v.string(),
-  org: v.string(),
+  slug: v.string(),
   name: v.string(),
   description: v.string(),
-  language: v.string(),
-  stars: v.number(),
-  openIssues: v.number(),
+  kind: v.union(v.literal("product"), v.literal("oss")),
+  liveUrl: v.optional(v.string()),
+  githubRepo: v.optional(v.string()),
+  visible: v.boolean(),
+  needs: v.array(needValidator),
   accent: v.string(),
   featured: v.boolean(),
+  language: v.optional(v.string()),
   addedBy: v.optional(v.id("members")),
 });
 
-export const list = query({
-  args: {
-    org: v.optional(v.string()),
-    paginationOpts: v.optional(paginationOptsValidator),
-  },
-  returns: v.array(projectDoc),
-  handler: async (ctx, args) => {
-    if (args.org) {
-      return await ctx.db
-        .query("projects")
-        .withIndex("by_org", (q) => q.eq("org", args.org!))
-        .collect();
-    }
+const seedProject = v.object({
+  slug: v.string(),
+  name: v.string(),
+  description: v.string(),
+  kind: v.union(v.literal("product"), v.literal("oss")),
+  liveUrl: v.optional(v.string()),
+  githubRepo: v.optional(v.string()),
+  visible: v.boolean(),
+  needs: v.array(needValidator),
+  accent: v.string(),
+  featured: v.boolean(),
+  language: v.optional(v.string()),
+});
 
-    return await ctx.db.query("projects").withIndex("by_featured").collect();
+export const list = query({
+  args: {},
+  returns: v.array(projectDoc),
+  handler: async (ctx) => {
+    const projects = await ctx.db.query("projects").collect();
+    return projects.flatMap((project) => {
+      if (!project.visible || !project.slug || !project.kind) {
+        return [];
+      }
+      return [
+        {
+          _id: project._id,
+          _creationTime: project._creationTime,
+          slug: project.slug,
+          name: project.name,
+          description: project.description,
+          kind: project.kind,
+          liveUrl: project.liveUrl,
+          githubRepo: project.githubRepo,
+          visible: true,
+          needs: project.needs ?? [],
+          accent: project.accent,
+          featured: project.featured,
+          language: project.language,
+          addedBy: project.addedBy,
+        },
+      ];
+    });
   },
 });
 
 export const stats = query({
   args: {},
   returns: v.object({
-    stars: v.number(),
-    repos: v.number(),
-    openIssues: v.number(),
+    members: v.number(),
+    projects: v.number(),
+    openNeeds: v.number(),
   }),
   handler: async (ctx) => {
-    const projects = await ctx.db.query("projects").collect();
+    const [members, projects] = await Promise.all([
+      ctx.db.query("members").collect(),
+      ctx.db
+        .query("projects")
+        .withIndex("by_visible", (q) => q.eq("visible", true))
+        .collect(),
+    ]);
+
     return {
-      stars: projects.reduce((sum, project) => sum + project.stars, 0),
-      repos: projects.length,
-      openIssues: projects.reduce((sum, project) => sum + project.openIssues, 0),
+      members: members.length,
+      projects: projects.length,
+      openNeeds: projects.reduce(
+        (sum, project) =>
+          sum +
+          (project.needs ?? []).filter((need) => need.status === "open").length,
+        0,
+      ),
     };
   },
 });
 
-export const upsertSeed = internalMutation({
-  args: {
-    projects: v.array(
-      v.object({
-        githubRepo: v.string(),
-        org: v.string(),
-        name: v.string(),
-        description: v.string(),
-        language: v.string(),
-        stars: v.number(),
-        openIssues: v.number(),
-        accent: v.string(),
-        featured: v.boolean(),
-      }),
-    ),
-  },
+export const replaceCommunitySeed = internalMutation({
+  args: { projects: v.array(seedProject) },
   returns: v.null(),
   handler: async (ctx, args) => {
-    for (const project of args.projects) {
-      const existing = await ctx.db
-        .query("projects")
-        .withIndex("by_repo", (q) => q.eq("githubRepo", project.githubRepo))
-        .unique();
+    const existing = await ctx.db.query("projects").collect();
+    for (const project of existing) {
+      await ctx.db.delete(project._id);
+    }
 
-      if (existing) {
-        await ctx.db.patch(existing._id, project);
-      } else {
-        await ctx.db.insert("projects", project);
-      }
+    for (const project of args.projects) {
+      await ctx.db.insert("projects", project);
     }
     return null;
   },
@@ -106,8 +129,6 @@ export const applyGithubStats = internalMutation({
     }
 
     await ctx.db.patch(existing._id, {
-      stars: args.stars,
-      openIssues: args.openIssues,
       description: args.description ?? existing.description,
       language: args.language ?? existing.language,
     });
@@ -138,6 +159,8 @@ export const listReposInternal = internalQuery({
   returns: v.array(v.string()),
   handler: async (ctx) => {
     const projects = await ctx.db.query("projects").collect();
-    return projects.map((project) => project.githubRepo);
+    return projects.flatMap((project) =>
+      project.githubRepo ? [project.githubRepo] : [],
+    );
   },
 });

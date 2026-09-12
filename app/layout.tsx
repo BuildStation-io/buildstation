@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s · BuildStation",
   },
   description:
-    "BuildStation — a network of builders shipping in public. Open-source portfolio, events, and GitHub login.",
+    "BuildStation — a network of builders shipping in public. Community projects, members, and a WhatsApp group.",
   applicationName: "BuildStation",
   icons: {
     icon: "/buildstation-mark.png",

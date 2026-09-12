@@ -11,6 +11,7 @@
 import type * as crons from "../crons.js";
 import type * as github from "../github.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as members from "../members.js";
 import type * as projects from "../projects.js";
 import type * as seed from "../seed.js";
 import type * as users from "../users.js";
@@ -25,6 +26,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   github: typeof github;
   "lib/auth": typeof lib_auth;
+  members: typeof members;
   projects: typeof projects;
   seed: typeof seed;
   users: typeof users;

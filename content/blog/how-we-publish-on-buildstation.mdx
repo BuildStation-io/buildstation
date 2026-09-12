@@ -1,0 +1,34 @@
+---
+title: How we publish on BuildStation
+date: 2026-09-12
+author: Andy Acaro
+excerpt: Posts are Markdown files in the repo. Open a branch, add an MDX file, send a PR.
+---
+
+BuildStation has no CMS and no admin editor. A blog post is a file. You publish it the same way you ship code.
+
+## The path
+
+1. Ask in WhatsApp for access to the site repo. It is private on purpose.
+2. Create a branch from `master`.
+3. Add a file under `content/blog/` named like `your-slug.mdx`.
+4. Open a pull request. After merge, the post is live.
+
+## The file
+
+Use this frontmatter, then write Markdown below the second `---`:
+
+```
+---
+title: Your title
+date: 2026-09-12
+author: Your name
+excerpt: One sentence for the index.
+---
+```
+
+Keep the slug in the filename. Do not edit someone else’s post unless you are fixing a typo.
+
+## Why a PR
+
+A pull request is the review. The group can read the draft, ask for a change, and merge when it is ready. That is the whole publishing workflow.

@@ -44,8 +44,8 @@ export function OssHero({
         {secondaryHref && secondaryLabel ? (
           <a
             href={secondaryHref}
-            target="_blank"
-            rel="noreferrer"
+            target={secondaryHref.startsWith("/") ? undefined : "_blank"}
+            rel={secondaryHref.startsWith("/") ? undefined : "noreferrer"}
             data-goo-target
             data-goo-color="#67e8f9"
             className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm text-foreground/80 transition-colors hover:text-foreground"

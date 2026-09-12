@@ -1,18 +1,20 @@
+import { WHATSAPP_INVITE } from "@/lib/community";
+
 const STEPS = [
   {
     n: "01",
-    title: "Pick a repo",
-    body: "Start with whatever you already use. The stack on this site is TypeScript, Next.js, Clerk, and Convex.",
+    title: "Join the network",
+    body: "Sign in on the site so you show up in Members, or jump into the WhatsApp group and say what you want to build.",
   },
   {
     n: "02",
-    title: "Find an issue",
-    body: "Look for good-first-issue and help-wanted labels, or open an issue proposing what you want to build before writing code.",
+    title: "Pick an open feature",
+    body: "InmoNExo needs a MarketEvents feed, price history charts, live Apify scrape, and a district/developer compare. Start with one.",
   },
   {
     n: "03",
-    title: "Ship the PR",
-    body: "Small, focused pull requests with conventional commits get reviewed fastest. Ask in the community if you get stuck.",
+    title: "Talk, then ship",
+    body: "Coordinate in WhatsApp. The product repo is still private — when you take a feature, the group will get you access to ship it.",
   },
 ];
 
@@ -23,7 +25,7 @@ export function ContributeSteps() {
         How to contribute
       </p>
       <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight sm:text-5xl">
-        Three steps to your first merged PR.
+        Three steps to your first ship.
       </h2>
       <div className="mt-12 grid gap-px bg-line sm:grid-cols-3">
         {STEPS.map((step) => (
@@ -38,6 +40,14 @@ export function ContributeSteps() {
           </article>
         ))}
       </div>
+      <a
+        href={WHATSAPP_INVITE}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-10 inline-flex h-11 items-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+      >
+        Open WhatsApp
+      </a>
     </section>
   );
 }
