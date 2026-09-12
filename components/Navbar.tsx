@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AuthButtons } from "./AuthButtons";
+import { BrandMark } from "./BrandMark";
 
 export function Navbar() {
   return (
@@ -11,9 +12,7 @@ export function Navbar() {
           data-goo-color="#ffffff"
           className="flex items-center gap-2.5 text-sm font-medium tracking-tight"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-foreground/30 text-[11px]">
-            ∞
-          </span>
+          <BrandMark className="h-7 w-7" />
           BuildStation
         </Link>
         <nav className="flex items-center gap-5">

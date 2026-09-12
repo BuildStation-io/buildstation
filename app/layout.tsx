@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   description:
     "BuildStation — a network of builders shipping in public. Open-source portfolio, events, and GitHub login.",
   applicationName: "BuildStation",
+  icons: {
+    icon: "/buildstation-mark.png",
+    apple: "/buildstation-mark.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
