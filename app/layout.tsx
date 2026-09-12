@@ -38,9 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           appearance={{
             variables: {
               colorBackground: "#0a0a0a",
-              colorForeground: "#f5f5f5",
               colorPrimary: "#f5f5f5",
-              colorInputBackground: "#111111",
               borderRadius: "0.75rem",
             },
           }}
