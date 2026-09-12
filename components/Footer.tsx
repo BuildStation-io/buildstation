@@ -16,7 +16,7 @@ export function Footer() {
             Open source
           </Link>
           <a
-            href="https://github.com/Andy18acaro/buildstation"
+            href="https://github.com/BuildStation-io/buildstation"
             target="_blank"
             rel="noreferrer"
             className="hover:text-foreground"
