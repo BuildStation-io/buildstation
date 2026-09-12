@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { sampleWater, waterField } from "@/lib/waterField";
 
-function punchBlack(source: HTMLImageElement): HTMLCanvasElement {
+function punchWhite(source: HTMLImageElement): HTMLCanvasElement {
   const punched = document.createElement("canvas");
   punched.width = source.naturalWidth;
   punched.height = source.naturalHeight;
@@ -18,7 +18,7 @@ function punchBlack(source: HTMLImageElement): HTMLCanvasElement {
     const r = pixels[i] ?? 0;
     const g = pixels[i + 1] ?? 0;
     const b = pixels[i + 2] ?? 0;
-    if (r < 22 && g < 22 && b < 22) {
+    if (r > 236 && g > 236 && b > 236) {
       pixels[i + 3] = 0;
     }
   }
@@ -41,11 +41,11 @@ export function HeroWaterMark() {
     }
 
     const image = new Image();
-    image.src = "/buildstation-hero-mark.png";
+    image.src = "/buildstation-mark.png";
     let source: HTMLCanvasElement | HTMLImageElement = image;
 
     image.onload = () => {
-      source = punchBlack(image);
+      source = punchWhite(image);
     };
 
     let raf = 0;

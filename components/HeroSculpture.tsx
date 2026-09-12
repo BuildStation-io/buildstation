@@ -7,10 +7,10 @@ import { HeroWaterMark } from "@/components/HeroWaterMark";
 function HeroFallback() {
   return (
     <Image
-      src="/buildstation-hero-mark.png"
+      src="/buildstation-mark.png"
       alt="BuildStation mark"
       fill
-      className="object-contain mix-blend-lighten"
+      className="object-contain"
       sizes="(min-width: 1024px) 40vw, 80vw"
     />
   );

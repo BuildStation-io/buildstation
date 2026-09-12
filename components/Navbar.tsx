@@ -12,7 +12,7 @@ export function Navbar() {
           data-goo-color="#ffffff"
           className="flex items-center gap-2.5 text-sm font-medium tracking-tight"
         >
-          <BrandMark className="h-7 w-7" />
+          <BrandMark className="h-8 w-8" />
           BuildStation
         </Link>
         <nav className="flex items-center gap-5">

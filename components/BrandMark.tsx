@@ -11,7 +11,7 @@ export function BrandMark({ className = "h-6 w-6" }: BrandMarkProps) {
       alt=""
       width={48}
       height={48}
-      className={`${className} invert`}
+      className={className}
       priority
     />
   );
