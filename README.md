@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BuildStation
 
-## Getting Started
+A network of builders shipping in public. Open-source portfolio inspired by [Crafter Station](https://crafter.run/en/oss) — not a copy.
 
-First, run the development server:
+**Stack:** Next.js 16 · Clerk (GitHub login) · Convex · Vercel
+
+## Local
 
 ```bash
+npm install
+npx convex dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Routes: `/`, `/oss`, `/sign-in`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Seed curated repos + live GitHub stats:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run convex:seed
+```
 
-## Learn More
+## Auth
 
-To learn more about Next.js, take a look at the following resources:
+Clerk is initialized with development keys in `.env.local`. Claim the app later:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx clerk@latest auth login
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Then enable **GitHub** as a social provider in the Clerk dashboard. A Convex JWT template named `convex` is already created (`aud: convex`).
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push this repo to GitHub.
+2. Import the repo in Vercel.
+3. Set env vars: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `NEXT_PUBLIC_CONVEX_URL`, `CLERK_JWT_ISSUER_DOMAIN`.
+4. Production Convex: `npx convex deploy` (production only).

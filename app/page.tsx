@@ -1,69 +1,73 @@
-import Image from "next/image";
+import Link from "next/link";
+import { HomeStats } from "@/components/HomeStats";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <section className="mx-auto w-full max-w-6xl px-5 pb-20 pt-24 sm:pt-32">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
+          BuildStation
+        </p>
+        <h1 className="mt-6 max-w-4xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
+          The network of builders.
+        </h1>
+        <p className="mt-8 max-w-2xl text-lg leading-8 text-muted">
+          A community of shippers, an open-source ecosystem, and a public
+          portfolio of repos you can contribute to. Meet, learn, and build in
+          public.
+        </p>
+        <div className="mt-10 flex flex-wrap items-center gap-4">
+          <Link
+            href="/oss"
+            data-goo-target
+            data-goo-color="#ffffff"
+            className="inline-flex h-11 items-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-90"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Browse open source
+          </Link>
+          <Link
+            href="/sign-in"
+            data-goo-target
+            data-goo-color="#67e8f9"
+            className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm text-foreground/80 transition-colors hover:text-foreground"
           >
-            Documentation
-          </a>
+            Sign in with GitHub
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-line">
+              ↗
+            </span>
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+      <HomeStats />
+      <section className="mx-auto w-full max-w-6xl px-5 py-20">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
+          What we craft
+        </p>
+        <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight">
+          Open source first. Community next.
+        </h2>
+        <div className="mt-12 grid gap-px bg-line sm:grid-cols-3">
+          {[
+            {
+              title: "Open source",
+              body: "A curated directory of repos with live stars, issues, and a path to your first PR.",
+            },
+            {
+              title: "Members",
+              body: "Sign in with GitHub. Your profile, avatar, and handle become part of the network.",
+            },
+            {
+              title: "Ships",
+              body: "The same stack we use in public: Next.js, Clerk, Convex, deployed on Vercel.",
+            },
+          ].map((item) => (
+            <article key={item.title} className="bg-background p-6 sm:p-8">
+              <h3 className="text-2xl font-medium tracking-tight">{item.title}</h3>
+              <p className="mt-4 text-sm leading-6 text-muted">{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
