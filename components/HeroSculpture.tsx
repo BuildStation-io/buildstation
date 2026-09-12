@@ -1,14 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-const HeroSculptureCanvas = dynamic(
-  () =>
-    import("./HeroSculptureCanvas").then((mod) => mod.HeroSculptureCanvas),
-  { ssr: false, loading: () => <HeroFallback /> },
-);
+import { HeroWaterMark } from "@/components/HeroWaterMark";
 
 function HeroFallback() {
   return (
@@ -16,19 +10,18 @@ function HeroFallback() {
       src="/buildstation-hero-mark.png"
       alt="BuildStation mark"
       fill
-      priority
-      className="object-contain mix-blend-lighten drop-shadow-[0_30px_80px_rgba(80,140,200,0.18)]"
+      className="object-contain mix-blend-lighten"
       sizes="(min-width: 1024px) 40vw, 80vw"
     />
   );
 }
 
 export function HeroSculpture() {
-  const [mode, setMode] = useState<"3d" | "static">("3d");
+  const [mode, setMode] = useState<"wet" | "static">("wet");
 
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setMode(motion.matches ? "static" : "3d");
+    const sync = () => setMode(motion.matches ? "static" : "wet");
     sync();
     motion.addEventListener("change", sync);
     return () => motion.removeEventListener("change", sync);
@@ -36,7 +29,7 @@ export function HeroSculpture() {
 
   return (
     <div className="relative mx-auto aspect-square w-full max-w-md lg:max-w-none">
-      {mode === "static" ? <HeroFallback /> : <HeroSculptureCanvas />}
+      {mode === "static" ? <HeroFallback /> : <HeroWaterMark />}
     </div>
   );
 }

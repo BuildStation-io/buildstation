@@ -44,12 +44,12 @@ function NetworkMark() {
   const material = useMemo(
     () =>
       new MeshPhysicalMaterial({
-        color: "#b9c2cc",
+        color: "#9aa3ad",
         metalness: 1,
-        roughness: 0.16,
-        envMapIntensity: 2.4,
+        roughness: 0.12,
+        envMapIntensity: 2.3,
         clearcoat: 1,
-        clearcoatRoughness: 0.06,
+        clearcoatRoughness: 0.05,
       }),
     [],
   );
@@ -104,8 +104,8 @@ function Rig() {
       return;
     }
     const t = state.clock.elapsedTime;
-    const targetX = 0.14 + Math.sin(t * 0.42) * 0.08 + pointer.current.y * 0.16;
-    const targetY = Math.sin(t * 0.55) * 0.46 + pointer.current.x * 0.38;
+    const targetX = 0.08 + Math.sin(t * 0.38) * 0.05 + pointer.current.y * 0.1;
+    const targetY = 0.1 + Math.sin(t * 0.45) * 0.16 + pointer.current.x * 0.22;
     group.rotation.x += (targetX - group.rotation.x) * Math.min(1, delta * 3);
     group.rotation.y += (targetY - group.rotation.y) * Math.min(1, delta * 2.4);
   });

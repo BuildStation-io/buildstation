@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const COLS = 180;
-const ROWS = 110;
-const DAMPING = 0.965;
-const SPREAD = 0.5;
+import { WATER_COLS, WATER_ROWS, waterField } from "@/lib/waterField";
 
 export function WaterSurface() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -35,36 +31,21 @@ export function WaterSurface() {
     }
 
     const buffer = document.createElement("canvas");
-    buffer.width = COLS;
-    buffer.height = ROWS;
+    buffer.width = WATER_COLS;
+    buffer.height = WATER_ROWS;
     const bufferCtx = buffer.getContext("2d");
     if (!bufferCtx) {
       return;
     }
 
-    const cells = COLS * ROWS;
-    let current = new Float32Array(cells);
-    let previous = new Float32Array(cells);
     let raf = 0;
     let lastX = -1;
     let lastY = -1;
 
-    const image = bufferCtx.createImageData(COLS, ROWS);
+    const image = bufferCtx.createImageData(WATER_COLS, WATER_ROWS);
     const pixels = image.data;
 
-    const drop = (clientX: number, clientY: number, force: number) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = Math.floor(((clientX - rect.left) / rect.width) * COLS);
-      const y = Math.floor(((clientY - rect.top) / rect.height) * ROWS);
-      if (x < 2 || y < 2 || x > COLS - 3 || y > ROWS - 3) {
-        return;
-      }
-      for (let oy = -1; oy <= 1; oy += 1) {
-        for (let ox = -1; ox <= 1; ox += 1) {
-          previous[(y + oy) * COLS + (x + ox)] += force;
-        }
-      }
-    };
+    const viewport = () => canvas.getBoundingClientRect();
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -75,49 +56,32 @@ export function WaterSurface() {
     const onMove = (event: PointerEvent) => {
       if (lastX >= 0) {
         const dist = Math.hypot(event.clientX - lastX, event.clientY - lastY);
-        drop(event.clientX, event.clientY, Math.min(16, 4 + dist * 0.2));
+        waterField.dropClient(
+          event.clientX,
+          event.clientY,
+          viewport(),
+          Math.min(16, 4 + dist * 0.2),
+        );
       }
       lastX = event.clientX;
       lastY = event.clientY;
     };
 
     const onDown = (event: PointerEvent) => {
-      drop(event.clientX, event.clientY, 32);
+      waterField.dropClient(event.clientX, event.clientY, viewport(), 32);
     };
 
     const tick = () => {
-      if (Math.random() < 0.08) {
-        const rx = 2 + Math.floor(Math.random() * (COLS - 4));
-        const ry = 2 + Math.floor(Math.random() * (ROWS - 4));
-        previous[ry * COLS + rx] += 6 + Math.random() * 8;
-      }
+      waterField.step();
+      const heights = waterField.current;
 
-      for (let y = 1; y < ROWS - 1; y += 1) {
-        const row = y * COLS;
-        for (let x = 1; x < COLS - 1; x += 1) {
+      for (let y = 1; y < WATER_ROWS - 1; y += 1) {
+        const row = y * WATER_COLS;
+        for (let x = 1; x < WATER_COLS - 1; x += 1) {
           const i = row + x;
-          const next =
-            (previous[i - 1]! +
-              previous[i + 1]! +
-              previous[i - COLS]! +
-              previous[i + COLS]!) *
-              SPREAD -
-            current[i]!;
-          current[i] = next * DAMPING;
-        }
-      }
-
-      const swap = previous;
-      previous = current;
-      current = swap;
-
-      for (let y = 1; y < ROWS - 1; y += 1) {
-        const row = y * COLS;
-        for (let x = 1; x < COLS - 1; x += 1) {
-          const i = row + x;
-          const h = current[i]!;
-          const dx = current[i - 1]! - current[i + 1]!;
-          const dy = current[i - COLS]! - current[i + COLS]!;
+          const h = heights[i]!;
+          const dx = heights[i - 1]! - heights[i + 1]!;
+          const dy = heights[i - WATER_COLS]! - heights[i + WATER_COLS]!;
           const light = Math.max(0, 1 - (dx + dy + 0.35) * 0.08);
           const wave = Math.max(-18, Math.min(18, h));
           const p = i * 4;
