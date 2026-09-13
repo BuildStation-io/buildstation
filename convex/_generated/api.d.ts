@@ -8,9 +8,12 @@
  * @module
  */
 
+import type * as builders from "../builders.js";
 import type * as crons from "../crons.js";
+import type * as founders from "../founders.js";
 import type * as github from "../github.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_githubIdentity from "../lib/githubIdentity.js";
 import type * as members from "../members.js";
 import type * as projects from "../projects.js";
 import type * as seed from "../seed.js";
@@ -23,9 +26,12 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  builders: typeof builders;
   crons: typeof crons;
+  founders: typeof founders;
   github: typeof github;
   "lib/auth": typeof lib_auth;
+  "lib/githubIdentity": typeof lib_githubIdentity;
   members: typeof members;
   projects: typeof projects;
   seed: typeof seed;

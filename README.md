@@ -1,6 +1,6 @@
 # BuildStation
 
-A network of builders shipping in public. Inspired by [Crafter Station](https://crafter.run/en/oss) — not a copy.
+A community applying AI to AEC-Energy. Inspired by [Crafter Station](https://crafter.run/en/oss) — not a copy.
 
 **Live:** [buildstation-ten.vercel.app](https://buildstation-ten.vercel.app)
 
@@ -15,7 +15,15 @@ npm run convex:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Routes: `/`, `/members`, `/projects`, `/blog`, `/sign-in`.
+Open [http://localhost:3000](http://localhost:3000). Routes: `/`, `/team`, `/members`, `/projects`, `/blog`, `/sign-in`, `/cli`.
+
+Login counts as **people in the network**. A **Builder** card (photo, GitHub, bio) is created after `curl -sL https://buildstation-ten.vercel.app/cli | sh` and GitHub sign-in. Founders on `/team` are static.
+
+```bash
+npm run convex:backfill-builders
+```
+
+That one-shot marks existing members who already have a GitHub username.
 
 Seed replaces the project catalog with the community’s live work (InmoNExo):
 

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "convex:dev": "npx convex dev",
-    "convex:seed": "npx convex run seed:run"
+    "convex:seed": "npx convex run seed:run",
+    "convex:backfill-builders": "npx convex run builders:backfillExisting"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.2",

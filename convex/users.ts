@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { githubLoginFromIdentity } from "./lib/githubIdentity";
 import { mutation } from "./_generated/server";
 
 export const ensure = mutation({
@@ -17,18 +18,17 @@ export const ensure = mutation({
       )
       .unique();
 
-    const nickname =
-      typeof identity.nickname === "string" ? identity.nickname : undefined;
-    const name = identity.name ?? nickname ?? "Builder";
+    const githubUsername = githubLoginFromIdentity(identity);
+    const name = identity.name ?? githubUsername ?? "Builder";
     const avatarUrl =
       typeof identity.pictureUrl === "string" ? identity.pictureUrl : undefined;
 
     if (existing) {
       await ctx.db.patch(existing._id, {
         clerkUserId: identity.subject,
-        githubUsername: nickname,
-        name,
-        avatarUrl,
+        githubUsername: githubUsername ?? existing.githubUsername,
+        name: name === "Builder" ? existing.name : name,
+        avatarUrl: avatarUrl ?? existing.avatarUrl,
       });
       return existing._id;
     }
@@ -36,9 +36,10 @@ export const ensure = mutation({
     return await ctx.db.insert("members", {
       tokenIdentifier: identity.tokenIdentifier,
       clerkUserId: identity.subject,
-      githubUsername: nickname,
+      githubUsername,
       name,
       avatarUrl,
+      isBuilder: false,
       joinedAt: Date.now(),
     });
   },

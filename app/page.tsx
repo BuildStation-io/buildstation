@@ -12,7 +12,7 @@ const CRAFT = [
   {
     href: "/members",
     title: "Members",
-    body: "Sign in. Your name and avatar become part of the network count. No borrowed star charts.",
+    body: "Sign in to count in the network. Run the CLI and join with GitHub to show up as a Builder.",
   },
   {
     href: "/blog",
@@ -30,11 +30,11 @@ export default function Home() {
             BuildStation
           </p>
           <h1 className="mt-6 max-w-xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
-            The network of builders.
+            AI for AEC-Energy.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-8 text-muted">
-            A community of shippers and a public portfolio of our own work.
-            Meet, learn, and build together — starting with InmoNExo.
+            A community applying AI to architecture, engineering, construction,
+            and energy. Meet, learn, and ship together — starting with InmoNExo.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
@@ -67,7 +67,7 @@ export default function Home() {
           What we craft
         </p>
         <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight">
-          Our projects. Our members. Our words.
+          Our projects. Our builders. Our words.
         </h2>
         <div className="mt-12 grid gap-px bg-line sm:grid-cols-3">
           {CRAFT.map((item) => (

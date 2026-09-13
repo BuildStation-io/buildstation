@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s · BuildStation",
   },
   description:
-    "BuildStation — a network of builders shipping in public. Community projects, members, and a WhatsApp group.",
+    "BuildStation — a community applying AI to AEC-Energy. Team, builders, projects, and a WhatsApp group.",
   applicationName: "BuildStation",
   icons: {
     icon: "/buildstation-mark.png",

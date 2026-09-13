@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { MembersDirectory } from "@/components/MembersDirectory";
 
 export const metadata: Metadata = {
-  title: "Members",
+  title: "Builders",
 };
 
 export default function MembersPage() {

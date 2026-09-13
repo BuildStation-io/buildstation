@@ -11,10 +11,15 @@ export default defineSchema({
     tokenIdentifier: v.string(),
     clerkUserId: v.string(),
     githubUsername: v.optional(v.string()),
+    githubUrl: v.optional(v.string()),
     name: v.string(),
     avatarUrl: v.optional(v.string()),
+    bio: v.optional(v.string()),
+    isBuilder: v.optional(v.boolean()),
     joinedAt: v.number(),
-  }).index("by_token", ["tokenIdentifier"]),
+  })
+    .index("by_token", ["tokenIdentifier"])
+    .index("by_builder", ["isBuilder"]),
 
   projects: defineTable({
     slug: v.optional(v.string()),
