@@ -21,11 +21,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
         </p>
       </div>
       <div className="border-t border-line">
-        <div
-          className={`mx-auto grid w-full max-w-6xl ${
-            projects.length === 1 ? "grid-cols-1" : "sm:grid-cols-2"
-          }`}
-        >
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
             <ProjectCard key={project.slug} project={project} />
           ))}

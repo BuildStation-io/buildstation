@@ -12,7 +12,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <article
       data-goo-target
       data-goo-color={project.accent}
-      className="relative flex min-h-[280px] flex-col border-b border-r border-line px-5 py-8"
+      className="relative flex min-h-[280px] flex-col border-b border-r border-line p-6 sm:p-8"
     >
       <span
         aria-hidden
@@ -22,8 +22,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
         {project.kind}
       </p>
-      <h3 className="mt-5 text-3xl font-medium tracking-tight">{project.name}</h3>
-      <p className="mt-4 max-w-md text-sm leading-6 text-muted">
+      <h3 className="mt-5 text-2xl font-medium tracking-tight">{project.name}</h3>
+      <p className="mt-4 text-sm leading-6 text-muted">
         {project.description}
       </p>
       {openNeeds.length > 0 ? (
