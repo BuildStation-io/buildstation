@@ -12,7 +12,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <article
       data-goo-target
       data-goo-color={project.accent}
-      className="relative flex min-h-[280px] flex-col border-b border-r border-line p-6 sm:p-8"
+      className="relative flex min-h-[280px] flex-col border-b border-r border-line px-5 py-8"
     >
       <span
         aria-hidden

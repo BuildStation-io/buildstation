@@ -20,10 +20,16 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
           pick one and talk to the group.
         </p>
       </div>
-      <div className="grid border-t border-line sm:grid-cols-2">
-        {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
-        ))}
+      <div className="border-t border-line">
+        <div
+          className={`mx-auto grid w-full max-w-6xl ${
+            projects.length === 1 ? "grid-cols-1" : "sm:grid-cols-2"
+          }`}
+        >
+          {projects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
       </div>
     </section>
   );
