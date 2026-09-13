@@ -1,4 +1,8 @@
-export const FOUNDER_GITHUB_USERNAMES = ["andy18acaro"] as const;
+export const FOUNDER_GITHUB_USERNAMES = [
+  "andy18acaro",
+  "alex10114",
+  "coraliefigue11",
+] as const;
 
 export function isFounderGithub(username: string | undefined): boolean {
   if (!username) {

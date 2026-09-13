@@ -16,6 +16,22 @@ export const TEAM: TeamMember[] = [
     bio: "Constructor applying AI to AEC-Energy — architecture, engineering, construction, and energy.",
     avatarUrl: "https://github.com/Andy18acaro.png",
   },
+  {
+    name: "Alex Rodrigo Salhua Vicuña",
+    role: "Cofounder",
+    location: "Peru",
+    githubUsername: "Alex10114",
+    bio: "Cofounder. Building AI for AEC-Energy with the team.",
+    avatarUrl: "https://github.com/Alex10114.png",
+  },
+  {
+    name: "Coralie Figueroa",
+    role: "Cofounder",
+    location: "Peru",
+    githubUsername: "coraliefigue11",
+    bio: "Cofounder. Building AI for AEC-Energy with the team.",
+    avatarUrl: "https://github.com/coraliefigue11.png",
+  },
 ];
 
 export const FOUNDER_GITHUB_USERNAMES = TEAM.map((member) =>
