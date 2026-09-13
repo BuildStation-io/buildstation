@@ -8,8 +8,7 @@ export function Footer() {
         <div>
           <p className="text-sm font-medium">BuildStation</p>
           <p className="mt-2 max-w-sm text-sm text-muted">
-            A network applying AI to AEC-Energy. Inspired by Crafter Station —
-            not a copy.
+            A network applying AI to AEC-Energy. Inspired by Crafter Station.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">

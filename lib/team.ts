@@ -32,6 +32,14 @@ export const TEAM: TeamMember[] = [
     bio: "Cofounder. Building AI for AEC-Energy with the team.",
     avatarUrl: "https://github.com/coraliefigue11.png",
   },
+  {
+    name: "Franklin Rosas",
+    role: "Cofounder",
+    location: "Peru",
+    githubUsername: "Franklin-Rosas",
+    bio: "Cofounder. Building AI for AEC-Energy with the team.",
+    avatarUrl: "https://github.com/Franklin-Rosas.png",
+  },
 ];
 
 export const FOUNDER_GITHUB_USERNAMES = TEAM.map((member) =>

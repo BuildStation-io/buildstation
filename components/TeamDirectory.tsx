@@ -12,7 +12,7 @@ export function TeamDirectory() {
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-8 text-muted">
           BuildStation is built to apply AI to architecture, engineering,
-          construction, and energy. Founders stay here — static on purpose.
+          construction, and energy. Founders stay here, static on purpose.
         </p>
       </section>
       <section className="border-t border-line">
