@@ -39,6 +39,19 @@ export const SEED_PROJECTS: Project[] = [
     featured: true,
     language: "TypeScript",
   },
+  {
+    slug: "aiconstructor",
+    name: "AIConstructor",
+    description:
+      "Mobile-first pre-construction assistant for Lima: anonymous assessment, grounded normative answers, saved cases, and a verified professional directory. It does not certify a home.",
+    kind: "oss",
+    githubRepo: "Andy18acaro/AIConstructor",
+    visible: true,
+    needs: [],
+    accent: "#e85d2a",
+    featured: false,
+    language: "JavaScript",
+  },
 ];
 
 export function projectStats(projects: Project[]): {

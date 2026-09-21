@@ -25,12 +25,26 @@ const INMONEXO = {
   language: "TypeScript",
 };
 
+const AICONSTRUCTOR = {
+  slug: "aiconstructor",
+  name: "AIConstructor",
+  description:
+    "Mobile-first pre-construction assistant for Lima: anonymous assessment, grounded normative answers, saved cases, and a verified professional directory. It does not certify a home.",
+  kind: "oss" as const,
+  githubRepo: "Andy18acaro/AIConstructor",
+  visible: true,
+  needs: [],
+  accent: "#e85d2a",
+  featured: false,
+  language: "JavaScript",
+};
+
 export const run = internalAction({
   args: {},
   returns: v.null(),
   handler: async (ctx) => {
     await ctx.runMutation(internal.projects.replaceCommunitySeed, {
-      projects: [INMONEXO],
+      projects: [INMONEXO, AICONSTRUCTOR],
     });
     return null;
   },

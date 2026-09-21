@@ -7,7 +7,7 @@ const CRAFT = [
   {
     href: "/projects",
     title: "Projects",
-    body: "InmoNExo is open source: see how the network builds and pick a next step.",
+    body: "InmoNExo and AIConstructor are open source. See how the network builds, and pick a next step on InmoNExo.",
   },
   {
     href: "/members",
@@ -35,7 +35,7 @@ export default function Home() {
             BuildStation
           </p>
           <h1 className="mt-6 max-w-xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
-            AI for infrastructure projects.
+            AI to improve infrastructure projects.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-8 text-muted">
             A community applying AI to infrastructure projects: construction,

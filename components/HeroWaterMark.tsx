@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { sampleWater, waterField } from "@/lib/waterField";
 
-function keyBlack(source: HTMLImageElement): HTMLCanvasElement {
+export function blackMark(source: HTMLImageElement): HTMLCanvasElement {
   const keyed = document.createElement("canvas");
   keyed.width = source.naturalWidth;
   keyed.height = source.naturalHeight;
@@ -20,6 +20,9 @@ function keyBlack(source: HTMLImageElement): HTMLCanvasElement {
     const b = pixels[i + 2] ?? 0;
     const lum = Math.max(r, g, b);
     const alpha = Math.min(1, Math.max(0, (lum - 10) / 30)) * 255;
+    pixels[i] = 8;
+    pixels[i + 1] = 8;
+    pixels[i + 2] = 8;
     pixels[i + 3] = alpha;
   }
   ctx.putImageData(frame, 0, 0);
@@ -45,7 +48,7 @@ export function HeroWaterMark() {
     let source: HTMLCanvasElement | HTMLImageElement = image;
 
     image.onload = () => {
-      source = keyBlack(image);
+      source = blackMark(image);
     };
 
     let raf = 0;

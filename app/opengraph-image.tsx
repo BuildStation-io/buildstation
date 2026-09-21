@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const alt = "BuildStation. AI for infrastructure projects.";
+export const alt = "BuildStation. AI to improve infrastructure projects.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -36,7 +36,7 @@ export default async function OpenGraphImage() {
             BUILDSTATION
           </div>
           <div style={{ fontSize: 56, marginTop: 24, lineHeight: 1.05, maxWidth: 640 }}>
-            AI for infrastructure projects.
+            AI to improve infrastructure projects.
           </div>
         </div>
       </div>

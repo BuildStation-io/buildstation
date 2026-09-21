@@ -21,9 +21,9 @@ function CatalogView({
       <OssHero
         eyebrow="Projects"
         title="Built in the open."
-        description="InmoNExo is the first project the network published: an open-source example of the solutions being built here."
+        description="InmoNExo and AIConstructor are the projects the network published: open-source examples of the solutions being built here."
         primaryHref="#projects"
-        primaryLabel="See InmoNExo"
+        primaryLabel="See the projects"
         secondaryHref={WHATSAPP_INVITE}
         secondaryLabel="Join WhatsApp"
       />
