@@ -8,11 +8,12 @@ export function TeamDirectory() {
           Team
         </p>
         <h1 className="mt-6 max-w-4xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
-          The people growing the AEC-Energy + AI culture.
+          The people growing an AI culture for infrastructure projects.
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-8 text-muted">
-          BuildStation is built to apply AI to architecture, engineering,
-          construction, and energy. Founders stay here, static on purpose.
+          BuildStation is built to apply AI to infrastructure projects:
+          construction, mining, energy, and real estate. Founders stay here,
+          static on purpose.
         </p>
       </section>
       <section className="border-t border-line">

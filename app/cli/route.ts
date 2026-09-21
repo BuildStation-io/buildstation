@@ -14,7 +14,7 @@ join="${joinUrl}"
 members="${membersUrl}"
 
 echo ""
-echo "BuildStation: AI for AEC-Energy"
+echo "BuildStation: AI for infrastructure projects."
 echo "Paste it to open Join in your browser. Sign in with GitHub so we can sync your card."
 echo ""
 

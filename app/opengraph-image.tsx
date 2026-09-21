@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const alt = "BuildStation. AI for AEC-Energy.";
+export const alt = "BuildStation. AI for infrastructure projects.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -35,8 +35,8 @@ export default async function OpenGraphImage() {
           <div style={{ fontSize: 28, letterSpacing: "0.18em", color: "#a1a1a1" }}>
             BUILDSTATION
           </div>
-          <div style={{ fontSize: 72, marginTop: 24, lineHeight: 1 }}>
-            AI for AEC-Energy
+          <div style={{ fontSize: 56, marginTop: 24, lineHeight: 1.05, maxWidth: 640 }}>
+            AI for infrastructure projects.
           </div>
         </div>
       </div>

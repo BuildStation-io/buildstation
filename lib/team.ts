@@ -13,7 +13,7 @@ export const TEAM: TeamMember[] = [
     role: "Founder",
     location: "Lima, Peru",
     githubUsername: "Andy18acaro",
-    bio: "Constructor applying AI to AEC-Energy: architecture, engineering, construction, and energy.",
+    bio: "Constructor applying AI to infrastructure projects: construction, mining, energy, and real estate.",
     avatarUrl: "https://github.com/Andy18acaro.png",
   },
   {
@@ -21,7 +21,7 @@ export const TEAM: TeamMember[] = [
     role: "Founder",
     location: "Peru",
     githubUsername: "Alex10114",
-    bio: "Founder. Building AI for AEC-Energy with the team.",
+    bio: "Founder. Building AI for infrastructure projects with the team.",
     avatarUrl: "/team/alex-pixel.png",
   },
   {
@@ -29,7 +29,7 @@ export const TEAM: TeamMember[] = [
     role: "Cofounder",
     location: "Peru",
     githubUsername: "coraliefigue11",
-    bio: "Cofounder. Building AI for AEC-Energy with the team.",
+    bio: "Cofounder. Building AI for infrastructure projects with the team.",
     avatarUrl: "https://github.com/coraliefigue11.png",
   },
   {
@@ -37,7 +37,7 @@ export const TEAM: TeamMember[] = [
     role: "Cofounder",
     location: "Peru",
     githubUsername: "Franklin-Rosas",
-    bio: "Cofounder. Building AI for AEC-Energy with the team.",
+    bio: "Cofounder. Building AI for infrastructure projects with the team.",
     avatarUrl: "https://github.com/Franklin-Rosas.png",
   },
 ];

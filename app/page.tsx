@@ -35,11 +35,12 @@ export default function Home() {
             BuildStation
           </p>
           <h1 className="mt-6 max-w-xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
-            AI for AEC-Energy.
+            AI for infrastructure projects.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-8 text-muted">
-            A community applying AI to architecture, engineering, construction,
-            and energy. Meet, learn, and ship together, starting with InmoNExo.
+            A community applying AI to infrastructure projects: construction,
+            mining, energy, and real estate. Meet, learn, and ship together,
+            starting with InmoNExo.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link

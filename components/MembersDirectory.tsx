@@ -184,7 +184,7 @@ function BuildersHero({ count }: { count: number }) {
         Meet the Builders.
       </h1>
       <p className="mt-8 max-w-2xl text-lg leading-8 text-muted">
-        People applying AI to AEC-Energy. Sign in to count in the network. Run
+        People applying AI to infrastructure projects. Sign in to count in the network. Run
         the CLI and join with GitHub to show a photo, handle, and bio.
       </p>
       <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
