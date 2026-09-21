@@ -18,11 +18,11 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: "Alex Rodrigo Salhua Vicuña",
-    role: "Cofounder",
+    role: "Founder",
     location: "Peru",
     githubUsername: "Alex10114",
-    bio: "Cofounder. Building AI for AEC-Energy with the team.",
-    avatarUrl: "https://github.com/Alex10114.png",
+    bio: "Founder. Building AI for AEC-Energy with the team.",
+    avatarUrl: "/team/alex-pixel.png",
   },
   {
     name: "Coralie Figueroa",
