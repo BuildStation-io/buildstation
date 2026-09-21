@@ -8,7 +8,8 @@ export function BrandMark({ className = "h-6 w-6" }: BrandMarkProps) {
   return (
     <Image
       src="/buildstation-mark.png"
-      alt=""
+      alt="BuildStation"
+      aria-label="BuildStation"
       width={48}
       height={48}
       className={className}

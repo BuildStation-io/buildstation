@@ -41,7 +41,7 @@ export function HeroWaterMark() {
     }
 
     const image = new Image();
-    image.src = "/buildstation-mark.png";
+    image.src = "/buildstation-hero-mark.png";
     let source: HTMLCanvasElement | HTMLImageElement = image;
 
     image.onload = () => {

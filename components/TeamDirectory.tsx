@@ -25,7 +25,7 @@ export function TeamDirectory() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={person.avatarUrl}
-                alt=""
+                alt={person.name}
                 className="h-24 w-24 rounded-full border border-line object-cover"
               />
               <div>
