@@ -29,7 +29,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       {openNeeds.length > 0 ? (
         <ul className="mt-6 space-y-2 text-sm leading-6 text-muted">
           {openNeeds.map((need) => (
-            <li key={need.title}>— {need.title}</li>
+            <li key={need.title}>· {need.title}</li>
           ))}
         </ul>
       ) : null}

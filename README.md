@@ -1,6 +1,6 @@
 # BuildStation
 
-A community applying AI to AEC-Energy. Inspired by [Crafter Station](https://crafter.run/en/oss) — not a copy.
+A community applying AI to AEC-Energy. Inspired by [Crafter Station](https://crafter.run/en/oss).
 
 **Live:** [buildstation-ten.vercel.app](https://buildstation-ten.vercel.app)
 

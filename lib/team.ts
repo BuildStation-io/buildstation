@@ -13,7 +13,7 @@ export const TEAM: TeamMember[] = [
     role: "Founder",
     location: "Lima, Peru",
     githubUsername: "Andy18acaro",
-    bio: "Constructor applying AI to AEC-Energy — architecture, engineering, construction, and energy.",
+    bio: "Constructor applying AI to AEC-Energy: architecture, engineering, construction, and energy.",
     avatarUrl: "https://github.com/Andy18acaro.png",
   },
   {

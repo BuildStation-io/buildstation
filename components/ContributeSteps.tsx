@@ -14,7 +14,7 @@ const STEPS = [
   {
     n: "03",
     title: "Talk, then ship",
-    body: "Coordinate in WhatsApp. The product repo is still private — when you take a feature, the group will get you access to ship it.",
+    body: "Coordinate in WhatsApp. The product repo is still private. When you take a feature, the group will get you access to ship it.",
   },
 ];
 

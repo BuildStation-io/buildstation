@@ -14,7 +14,7 @@ join="${joinUrl}"
 members="${membersUrl}"
 
 echo ""
-echo "BuildStation — AI for AEC-Energy"
+echo "BuildStation: AI for AEC-Energy"
 echo "Join as a Builder with GitHub so we can sync your photo, handle, and bio."
 echo ""
 

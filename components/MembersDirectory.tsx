@@ -34,7 +34,7 @@ function BuilderGrid({ builders }: { builders: BuilderCard[] }) {
           </p>
           <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-muted">
             Run the CLI and sign in with GitHub. Login alone counts in the
-            network — a Builder card needs a GitHub profile.
+            network. A Builder card needs a GitHub profile.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
@@ -133,7 +133,7 @@ function BuildersHero({ count }: { count: number }) {
           </p>
           <CliJoinSnippet />
           <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
-            Paste it into a terminal. It opens Join — use GitHub so we can sync
+            Paste it into a terminal. It opens Join. Use GitHub so we can sync
             your profile.
           </p>
         </div>

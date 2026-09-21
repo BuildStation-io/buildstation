@@ -21,7 +21,7 @@ function CatalogView({
       <OssHero
         eyebrow="Projects"
         title="Community projects, not borrowed repos."
-        description="BuildStation ships its own work. InmoNExo is the first live product — market intelligence for Lima developers, with a real backlog you can take."
+        description="BuildStation ships its own work. InmoNExo is the first live product: market intelligence for Lima developers, with a real backlog you can take."
         primaryHref="#projects"
         primaryLabel="See InmoNExo"
         secondaryHref={WHATSAPP_INVITE}
