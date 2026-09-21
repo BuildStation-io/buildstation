@@ -7,7 +7,7 @@ const CRAFT = [
   {
     href: "/projects",
     title: "Projects",
-    body: "InmoNExo is live. Open features sit on the project card. Take one and ship with the group.",
+    body: "InmoNExo is open source: see how the network builds and pick a next step.",
   },
   {
     href: "/members",

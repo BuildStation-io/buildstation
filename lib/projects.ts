@@ -24,9 +24,10 @@ export const SEED_PROJECTS: Project[] = [
     slug: "inmonexo",
     name: "InmoNExo",
     description:
-      "Real estate market intelligence for Lima developers. Scrapes public supply, normalizes pricing and history, and exposes an API plus dashboard. Not a marketplace.",
-    kind: "product",
+      "Open-source real estate market intelligence for Lima. Scrapes public supply, normalizes pricing and history, and exposes an API plus dashboard. Published so anyone can see how the network builds.",
+    kind: "oss",
     liveUrl: "https://inmonexo-xi.vercel.app",
+    githubRepo: "Andy18acaro/InmoNExo",
     visible: true,
     needs: [
       { title: "MarketEvents feed on the dashboard", status: "done" },

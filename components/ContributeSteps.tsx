@@ -8,13 +8,13 @@ const STEPS = [
   },
   {
     n: "02",
-    title: "Pick an open feature",
-    body: "The events feed and the district compare are already on the InmoNExo dashboard. Still open: a price history chart and a live Apify scrape. Start with one.",
+    title: "Pick a next step",
+    body: "Pick a next step from the InmoNExo roadmap.",
   },
   {
     n: "03",
     title: "Talk, then ship",
-    body: "Coordinate in WhatsApp. The product repo is still private. When you take a feature, the group will get you access to ship it.",
+    body: "Fork the repo, open a PR, and coordinate in WhatsApp.",
   },
 ];
 
