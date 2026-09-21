@@ -10,7 +10,7 @@ function HeroFallback() {
       src="/buildstation-hero-mark.png"
       alt="BuildStation mark"
       fill
-      className="object-contain"
+      className="object-contain mix-blend-lighten"
       sizes="(min-width: 1024px) 40vw, 80vw"
     />
   );
