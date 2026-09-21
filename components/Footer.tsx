@@ -16,7 +16,7 @@ export function Footer() {
             Team
           </Link>
           <Link href="/members" className="hover:text-foreground">
-            Members
+            Builders
           </Link>
           <Link href="/projects" className="hover:text-foreground">
             Projects

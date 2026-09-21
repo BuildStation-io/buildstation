@@ -6,7 +6,7 @@ import { WhatsAppLink } from "./WhatsAppLink";
 
 const NAV_LINKS = [
   { href: "/team", label: "Team" },
-  { href: "/members", label: "Members" },
+  { href: "/members", label: "Builders" },
   { href: "/projects", label: "Projects" },
   { href: "/blog", label: "Blog" },
   { href: "/build-lab", label: "Build Lab" },

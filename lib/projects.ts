@@ -1,3 +1,5 @@
+import { TEAM } from "./team";
+
 export type ProjectNeed = {
   title: string;
   status: "open" | "done";
@@ -44,7 +46,7 @@ export function projectStats(projects: Project[]): {
   openNeeds: number;
 } {
   return {
-    members: 0,
+    members: TEAM.length,
     projects: projects.filter((project) => project.visible).length,
     openNeeds: projects.reduce(
       (sum, project) =>

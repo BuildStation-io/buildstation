@@ -1,4 +1,6 @@
 import { v } from "convex/values";
+import { TEAM } from "../lib/team";
+import { isFounderGithub } from "./founders";
 import { needValidator } from "./schema";
 import { internalMutation, internalQuery, query } from "./_generated/server";
 
@@ -80,8 +82,13 @@ export const stats = query({
         .collect(),
     ]);
 
+    const builders = members.filter(
+      (member) =>
+        member.isBuilder === true && !isFounderGithub(member.githubUsername),
+    );
+
     return {
-      members: members.length,
+      members: TEAM.length + builders.length,
       projects: projects.length,
       openNeeds: projects.reduce(
         (sum, project) =>

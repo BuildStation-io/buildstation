@@ -1,9 +1,11 @@
 "use client";
 
 import { useQuery } from "convex/react";
+import Link from "next/link";
 import { CliJoinSnippet } from "./CliJoinSnippet";
 import { WhatsAppLink } from "./WhatsAppLink";
 import { api } from "@/convex/_generated/api";
+import { TEAM } from "@/lib/team";
 
 type BuilderCard = {
   _id: string;
@@ -27,8 +29,16 @@ function githubHref(builder: BuilderCard) {
 function BuilderGrid({ builders }: { builders: BuilderCard[] }) {
   if (builders.length === 0) {
     return (
-      <section className="mx-auto w-full max-w-6xl px-5 pb-24">
-        <div className="border border-line px-6 py-16 text-center">
+      <section className="border-t border-line">
+        <div className="mx-auto w-full max-w-6xl px-5 py-10">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
+            Builders
+          </p>
+          <h2 className="mt-3 text-3xl font-medium tracking-tight">
+            Registered builders.
+          </h2>
+        </div>
+        <div className="mx-auto w-full max-w-6xl border-t border-line px-6 py-16 text-center">
           <p className="text-2xl font-medium tracking-tight">
             Be the first Builder.
           </p>
@@ -52,7 +62,15 @@ function BuilderGrid({ builders }: { builders: BuilderCard[] }) {
 
   return (
     <section className="border-t border-line">
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mx-auto w-full max-w-6xl px-5 py-10">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
+          Builders
+        </p>
+        <h2 className="mt-3 text-3xl font-medium tracking-tight">
+          Registered builders.
+        </h2>
+      </div>
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 border-t border-line sm:grid-cols-2 md:grid-cols-3">
         {builders.map((builder, index) => {
           const href = githubHref(builder);
           const handle = builder.githubUsername
@@ -113,6 +131,49 @@ function BuilderGrid({ builders }: { builders: BuilderCard[] }) {
   );
 }
 
+function CoreTeam() {
+  return (
+    <section className="border-t border-line">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-5 py-10 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
+            Core team
+          </p>
+          <h2 className="mt-3 text-3xl font-medium tracking-tight">
+            The founders.
+          </h2>
+        </div>
+        <Link
+          href="/team"
+          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted hover:text-foreground"
+        >
+          See the team
+        </Link>
+      </div>
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 border-t border-line sm:grid-cols-2 md:grid-cols-4">
+        {TEAM.map((person) => (
+          <article
+            key={person.githubUsername}
+            className="flex flex-col items-start gap-4 border-b border-r border-line p-8"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={person.avatarUrl}
+              alt={person.name}
+              className="h-16 w-16 rounded-full border border-line object-cover"
+            />
+            <div>
+              <p className="text-xl font-medium tracking-tight">{person.name}</p>
+              <p className="mt-1 font-mono text-[12px] text-muted">{person.role}</p>
+              <p className="mt-2 text-sm text-muted">{person.location}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function BuildersHero({ count }: { count: number }) {
   return (
     <section className="mx-auto w-full max-w-6xl px-5 pb-16 pt-24 sm:pt-32">
@@ -140,7 +201,7 @@ function BuildersHero({ count }: { count: number }) {
         <div className="shrink-0 border border-line px-6 py-5 text-right">
           <p className="text-5xl font-medium tracking-tight">{count}</p>
           <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
-            Registered builders
+            People in the network
           </p>
         </div>
       </div>
@@ -150,21 +211,19 @@ function BuildersHero({ count }: { count: number }) {
 
 function LiveDirectory() {
   const builders = useQuery(api.members.listBuilders, {});
-  if (builders === undefined) {
-    return (
-      <>
-        <BuildersHero count={0} />
-        <section className="mx-auto w-full max-w-6xl px-5 pb-24 text-sm text-muted">
-          Loading builders…
-        </section>
-      </>
-    );
-  }
+  const count = TEAM.length + (builders?.length ?? 0);
 
   return (
     <>
-      <BuildersHero count={builders.length} />
-      <BuilderGrid builders={builders} />
+      <BuildersHero count={count} />
+      <CoreTeam />
+      {builders === undefined ? (
+        <section className="mx-auto w-full max-w-6xl px-5 py-16 text-sm text-muted">
+          Loading builders…
+        </section>
+      ) : (
+        <BuilderGrid builders={builders} />
+      )}
     </>
   );
 }
@@ -173,7 +232,8 @@ export function MembersDirectory() {
   if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
     return (
       <>
-        <BuildersHero count={0} />
+        <BuildersHero count={TEAM.length} />
+        <CoreTeam />
         <BuilderGrid builders={[]} />
       </>
     );
