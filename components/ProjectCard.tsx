@@ -5,6 +5,7 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const doneNeeds = project.needs.filter((need) => need.status === "done");
   const openNeeds = project.needs.filter((need) => need.status === "open");
   const href = project.liveUrl ?? "#projects";
 
@@ -26,12 +27,24 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <p className="mt-4 text-sm leading-6 text-muted">
         {project.description}
       </p>
-      {openNeeds.length > 0 ? (
+      {doneNeeds.length > 0 ? (
         <ul className="mt-6 space-y-2 text-sm leading-6 text-muted">
-          {openNeeds.map((need) => (
-            <li key={need.title}>· {need.title}</li>
+          {doneNeeds.map((need) => (
+            <li key={need.title}>✓ {need.title}</li>
           ))}
         </ul>
+      ) : null}
+      {openNeeds.length > 0 ? (
+        <div className="mt-6">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+            Backlog
+          </p>
+          <ul className="mt-3 space-y-2 text-sm leading-6 text-muted">
+            {openNeeds.map((need) => (
+              <li key={need.title}>· {need.title}</li>
+            ))}
+          </ul>
+        </div>
       ) : null}
       <div className="mt-auto pt-8">
         {project.liveUrl ? (

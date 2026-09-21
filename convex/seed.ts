@@ -11,12 +11,12 @@ const INMONEXO = {
   liveUrl: "https://inmonexo-xi.vercel.app",
   visible: true,
   needs: [
-    { title: "MarketEvents feed on the dashboard", status: "open" as const },
+    { title: "MarketEvents feed on the dashboard", status: "done" as const },
     { title: "Price history chart per project", status: "open" as const },
     { title: "Live scrape via Apify", status: "open" as const },
     {
       title: "District and developer compare",
-      status: "open" as const,
+      status: "done" as const,
     },
   ],
   accent: "#67e8f9",

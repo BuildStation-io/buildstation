@@ -9,7 +9,7 @@ const STEPS = [
   {
     n: "02",
     title: "Pick an open feature",
-    body: "InmoNExo needs a MarketEvents feed, price history charts, live Apify scrape, and a district/developer compare. Start with one.",
+    body: "The events feed and the district compare are already on the InmoNExo dashboard. Still open: a price history chart and a live Apify scrape. Start with one.",
   },
   {
     n: "03",

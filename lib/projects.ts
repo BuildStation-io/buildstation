@@ -29,10 +29,10 @@ export const SEED_PROJECTS: Project[] = [
     liveUrl: "https://inmonexo-xi.vercel.app",
     visible: true,
     needs: [
-      { title: "MarketEvents feed on the dashboard", status: "open" },
+      { title: "MarketEvents feed on the dashboard", status: "done" },
       { title: "Price history chart per project", status: "open" },
       { title: "Live scrape via Apify", status: "open" },
-      { title: "District and developer compare", status: "open" },
+      { title: "District and developer compare", status: "done" },
     ],
     accent: "#67e8f9",
     featured: true,

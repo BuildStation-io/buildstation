@@ -189,13 +189,10 @@ function BuildersHero({ count }: { count: number }) {
       </p>
       <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0 flex-1">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
-            Join with your AI agent
-          </p>
           <CliJoinSnippet />
           <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
-            Paste it into a terminal. It opens Join. Use GitHub so we can sync
-            your profile.
+            Paste it to open Join in your browser. Sign in with GitHub so we
+            can sync your card.
           </p>
         </div>
         <div className="shrink-0 border border-line px-6 py-5 text-right">
