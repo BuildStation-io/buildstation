@@ -24,6 +24,9 @@ export function Footer() {
           <Link href="/blog" className="hover:text-foreground">
             Blog
           </Link>
+          <Link href="/build-lab" className="hover:text-foreground">
+            Build Lab
+          </Link>
           <WhatsAppLink className="inline-flex items-center gap-2 hover:text-foreground" />
         </div>
       </div>
