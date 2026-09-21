@@ -39,7 +39,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
         aria-expanded={open}
         aria-controls="mobile-nav"
         aria-label={open ? "Close menu" : "Open menu"}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => setOpen(!open)}
         className="flex h-10 w-10 items-center justify-center rounded-full border border-line"
       >
         <span aria-hidden className="relative block h-3 w-4">
