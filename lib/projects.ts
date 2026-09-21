@@ -54,6 +54,48 @@ export const SEED_PROJECTS: Project[] = [
   },
 ];
 
+type RemoteProject = {
+  slug?: string;
+  name?: string;
+  description?: string;
+  kind?: Project["kind"];
+  liveUrl?: string;
+  githubRepo?: string;
+  visible?: boolean;
+  needs?: ProjectNeed[];
+  accent?: string;
+  featured?: boolean;
+  language?: string;
+};
+
+export function catalogProjects(remote: RemoteProject[] | undefined): Project[] {
+  const seedSlugs = new Set(SEED_PROJECTS.map((project) => project.slug));
+  const extras = (remote ?? []).flatMap((project): Project[] => {
+    if (!project.slug || seedSlugs.has(project.slug)) {
+      return [];
+    }
+    if (!project.name || !project.description || !project.kind || !project.accent) {
+      return [];
+    }
+    return [
+      {
+        slug: project.slug,
+        name: project.name,
+        description: project.description,
+        kind: project.kind,
+        liveUrl: project.liveUrl,
+        githubRepo: project.githubRepo,
+        visible: project.visible !== false,
+        needs: project.needs ?? [],
+        accent: project.accent,
+        featured: project.featured ?? false,
+        language: project.language,
+      },
+    ];
+  });
+  return [...SEED_PROJECTS, ...extras];
+}
+
 export function projectStats(projects: Project[]): {
   members: number;
   projects: number;

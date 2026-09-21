@@ -7,7 +7,7 @@ import { ProjectGrid } from "./ProjectGrid";
 import { StatsStrip } from "./StatsStrip";
 import { api } from "@/convex/_generated/api";
 import { WHATSAPP_INVITE } from "@/lib/community";
-import { SEED_PROJECTS, projectStats, type Project } from "@/lib/projects";
+import { SEED_PROJECTS, catalogProjects, projectStats, type Project } from "@/lib/projects";
 
 function CatalogView({
   projects,
@@ -41,8 +41,13 @@ function CatalogView({
 function LiveCatalog() {
   const remote = useQuery(api.projects.list, {});
   const remoteStats = useQuery(api.projects.stats, {});
-  const projects = remote && remote.length > 0 ? remote : SEED_PROJECTS;
-  const stats = remoteStats ?? projectStats(projects);
+  const projects = catalogProjects(remote);
+  const catalog = projectStats(projects);
+  const stats = {
+    members: remoteStats?.members ?? catalog.members,
+    projects: catalog.projects,
+    openNeeds: catalog.openNeeds,
+  };
   return <CatalogView projects={projects} stats={stats} />;
 }
 
