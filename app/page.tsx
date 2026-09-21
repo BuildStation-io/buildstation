@@ -19,6 +19,11 @@ const CRAFT = [
     title: "Blog",
     body: "Posts live as MDX in the repo. Open a PR to publish. No CMS, no admin editor.",
   },
+  {
+    href: "/build-lab",
+    title: "Build Lab",
+    body: "Bring one field problem. A squad ships it in two-week sprints.",
+  },
 ] as const;
 
 export default function Home() {
@@ -69,7 +74,7 @@ export default function Home() {
         <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight">
           Our projects. Our builders. Our words.
         </h2>
-        <div className="mt-12 grid gap-px bg-line sm:grid-cols-3">
+        <div className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
           {CRAFT.map((item) => (
             <Link
               key={item.title}

@@ -8,6 +8,7 @@ const STATIC_PATHS = [
   "/members",
   "/projects",
   "/blog",
+  "/build-lab",
   "/sign-in",
   "/sign-up",
 ];

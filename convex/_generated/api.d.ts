@@ -12,6 +12,7 @@ import type * as builders from "../builders.js";
 import type * as crons from "../crons.js";
 import type * as founders from "../founders.js";
 import type * as github from "../github.js";
+import type * as labLeads from "../labLeads.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_githubIdentity from "../lib/githubIdentity.js";
 import type * as members from "../members.js";
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   founders: typeof founders;
   github: typeof github;
+  labLeads: typeof labLeads;
   "lib/auth": typeof lib_auth;
   "lib/githubIdentity": typeof lib_githubIdentity;
   members: typeof members;

@@ -47,4 +47,14 @@ export default defineSchema({
     key: v.string(),
     lastSyncAt: v.number(),
   }).index("by_key", ["key"]),
+
+  labLeads: defineTable({
+    name: v.string(),
+    company: v.string(),
+    sector: v.string(),
+    challenge: v.string(),
+    email: v.optional(v.string()),
+    createdAt: v.number(),
+    source: v.string(),
+  }),
 });
