@@ -3,27 +3,30 @@
 import { useEffect, useRef } from "react";
 import { sampleWater, waterField } from "@/lib/waterField";
 
-function punchWhite(source: HTMLImageElement): HTMLCanvasElement {
-  const punched = document.createElement("canvas");
-  punched.width = source.naturalWidth;
-  punched.height = source.naturalHeight;
-  const ctx = punched.getContext("2d");
+export function blackMark(source: HTMLImageElement): HTMLCanvasElement {
+  const keyed = document.createElement("canvas");
+  keyed.width = source.naturalWidth;
+  keyed.height = source.naturalHeight;
+  const ctx = keyed.getContext("2d");
   if (!ctx) {
-    return punched;
+    return keyed;
   }
   ctx.drawImage(source, 0, 0);
-  const frame = ctx.getImageData(0, 0, punched.width, punched.height);
+  const frame = ctx.getImageData(0, 0, keyed.width, keyed.height);
   const pixels = frame.data;
   for (let i = 0; i < pixels.length; i += 4) {
     const r = pixels[i] ?? 0;
     const g = pixels[i + 1] ?? 0;
     const b = pixels[i + 2] ?? 0;
-    if (r > 236 && g > 236 && b > 236) {
-      pixels[i + 3] = 0;
-    }
+    const lum = Math.max(r, g, b);
+    const alpha = Math.min(1, Math.max(0, (lum - 10) / 30)) * 255;
+    pixels[i] = 8;
+    pixels[i + 1] = 8;
+    pixels[i + 2] = 8;
+    pixels[i + 3] = alpha;
   }
   ctx.putImageData(frame, 0, 0);
-  return punched;
+  return keyed;
 }
 
 export function HeroWaterMark() {
@@ -41,11 +44,11 @@ export function HeroWaterMark() {
     }
 
     const image = new Image();
-    image.src = "/buildstation-mark.png";
+    image.src = "/buildstation-hero-mark.png";
     let source: HTMLCanvasElement | HTMLImageElement = image;
 
     image.onload = () => {
-      source = punchWhite(image);
+      source = blackMark(image);
     };
 
     let raf = 0;
@@ -93,8 +96,8 @@ export function HeroWaterMark() {
             srcY,
             srcSeg,
             srcSlice,
-            s * destSeg + grad * 14,
-            y + wave * 0.55,
+            s * destSeg + grad * 22,
+            y + wave * 0.9,
             destSeg + 1,
             slice,
           );

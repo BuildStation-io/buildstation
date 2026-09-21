@@ -32,7 +32,7 @@ export function AuthButtons() {
           type="button"
           data-goo-target
           data-goo-color="#ffffff"
-          className="inline-flex h-9 items-center rounded-full border border-line px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/80 transition-colors hover:border-foreground/40 hover:text-foreground"
+          className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-line px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/80 transition-colors hover:border-foreground/40 hover:text-foreground"
         >
           Sign in
         </button>
@@ -42,7 +42,7 @@ export function AuthButtons() {
           type="button"
           data-goo-target
           data-goo-color="#67e8f9"
-          className="inline-flex h-9 items-center rounded-full bg-foreground px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-background"
+          className="inline-flex h-9 items-center whitespace-nowrap rounded-full bg-foreground px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-background"
         >
           Join
         </button>

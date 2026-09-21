@@ -16,8 +16,8 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
           What the network is shipping.
         </h2>
         <p className="mt-5 max-w-2xl text-base leading-7 text-muted">
-          One live product today. Open features below are the real backlog —
-          pick one and talk to the group.
+          Two open-source projects today: InmoNExo and AIConstructor. Read the
+          code, run it, or pick a next step and talk to the group.
         </p>
       </div>
       <div className="border-t border-line">

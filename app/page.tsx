@@ -7,7 +7,7 @@ const CRAFT = [
   {
     href: "/projects",
     title: "Projects",
-    body: "InmoNExo is live. Open features sit on the project card — take one and ship with the group.",
+    body: "InmoNExo and AIConstructor are open source. See how the network builds, and pick a next step on InmoNExo.",
   },
   {
     href: "/members",
@@ -17,7 +17,12 @@ const CRAFT = [
   {
     href: "/blog",
     title: "Blog",
-    body: "Posts live as MDX in the repo. Open a PR to publish — no CMS, no admin editor.",
+    body: "Posts live as MDX in the repo. Open a PR to publish. No CMS, no admin editor.",
+  },
+  {
+    href: "/build-lab",
+    title: "Build Lab",
+    body: "Bring one field problem. A squad ships it in two-week sprints.",
   },
 ] as const;
 
@@ -30,11 +35,12 @@ export default function Home() {
             BuildStation
           </p>
           <h1 className="mt-6 max-w-xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
-            AI for AEC-Energy.
+            AI to improve infrastructure projects.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-8 text-muted">
-            A community applying AI to architecture, engineering, construction,
-            and energy. Meet, learn, and ship together — starting with InmoNExo.
+            A community applying AI to infrastructure projects: construction,
+            mining, energy, and real estate. Meet, learn, and ship together,
+            starting with InmoNExo.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
@@ -64,12 +70,12 @@ export default function Home() {
       <HomeStats />
       <section className="mx-auto w-full max-w-6xl px-5 py-20">
         <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
-          What we craft
+          What we ship
         </p>
         <h2 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight">
           Our projects. Our builders. Our words.
         </h2>
-        <div className="mt-12 grid gap-px bg-line sm:grid-cols-3">
+        <div className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
           {CRAFT.map((item) => (
             <Link
               key={item.title}

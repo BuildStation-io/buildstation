@@ -14,8 +14,8 @@ join="${joinUrl}"
 members="${membersUrl}"
 
 echo ""
-echo "BuildStation — AI for AEC-Energy"
-echo "Join as a Builder with GitHub so we can sync your photo, handle, and bio."
+echo "BuildStation: AI to improve infrastructure projects."
+echo "Paste it to open Join in your browser. Sign in with GitHub so we can sync your card."
 echo ""
 
 if command -v open >/dev/null 2>&1; then

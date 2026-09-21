@@ -1,6 +1,6 @@
 # BuildStation
 
-A community applying AI to AEC-Energy. Inspired by [Crafter Station](https://crafter.run/en/oss) — not a copy.
+AI to improve infrastructure projects. Inspired by [Crafter Station](https://crafter.run/en/oss).
 
 **Live:** [buildstation-ten.vercel.app](https://buildstation-ten.vercel.app)
 
@@ -15,7 +15,7 @@ npm run convex:seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Routes: `/`, `/team`, `/members`, `/projects`, `/blog`, `/sign-in`, `/cli`.
+Open [http://localhost:3000](http://localhost:3000). Routes: `/`, `/team`, `/members`, `/projects`, `/blog`, `/build-lab`, `/sign-in`, `/cli`.
 
 Login counts as **people in the network**. A **Builder** card (photo, GitHub, bio) is created after `curl -sL https://buildstation-ten.vercel.app/cli | sh` and GitHub sign-in. Founders on `/team` are static.
 

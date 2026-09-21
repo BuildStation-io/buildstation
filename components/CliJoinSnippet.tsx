@@ -19,7 +19,7 @@ export function CliJoinSnippet() {
   return (
     <div className="flex w-full max-w-2xl items-center gap-3 border border-line bg-surface px-4 py-3">
       <span className="font-mono text-[11px] text-muted">$</span>
-      <code className="min-w-0 flex-1 truncate font-mono text-[12px] text-foreground/90 sm:text-[13px]">
+      <code className="min-w-0 flex-1 break-all font-mono text-[12px] text-foreground/90 sm:text-[13px]">
         {CLI_COMMAND}
       </code>
       <button

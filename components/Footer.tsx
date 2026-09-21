@@ -8,7 +8,7 @@ export function Footer() {
         <div>
           <p className="text-sm font-medium">BuildStation</p>
           <p className="mt-2 max-w-sm text-sm text-muted">
-            A network applying AI to AEC-Energy. Inspired by Crafter Station.
+            AI to improve infrastructure projects. Built in Lima, shipping for LatAm.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
@@ -16,13 +16,16 @@ export function Footer() {
             Team
           </Link>
           <Link href="/members" className="hover:text-foreground">
-            Members
+            Builders
           </Link>
           <Link href="/projects" className="hover:text-foreground">
             Projects
           </Link>
           <Link href="/blog" className="hover:text-foreground">
             Blog
+          </Link>
+          <Link href="/build-lab" className="hover:text-foreground">
+            Build Lab
           </Link>
           <WhatsAppLink className="inline-flex items-center gap-2 hover:text-foreground" />
         </div>
