@@ -24,7 +24,6 @@ export default async function OpenGraphImage() {
           padding: "80px",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt="" width={220} height={220} />
         <div
           style={{

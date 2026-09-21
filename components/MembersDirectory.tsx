@@ -47,12 +47,12 @@ function BuilderGrid({ builders }: { builders: BuilderCard[] }) {
             network. A Builder card needs a GitHub profile.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a
+            <Link
               href="/sign-up"
               className="inline-flex h-11 items-center rounded-full bg-foreground px-5 text-sm font-medium text-background"
             >
               Join with GitHub
-            </a>
+            </Link>
             <WhatsAppLink className="inline-flex h-11 items-center gap-2 text-sm text-foreground/80 hover:text-foreground" />
           </div>
         </div>

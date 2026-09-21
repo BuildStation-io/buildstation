@@ -16,12 +16,13 @@ type MobileMenuProps = {
 };
 
 export function MobileMenu({ links }: MobileMenuProps) {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === pathname;
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  function setOpen(next: boolean) {
+    setOpenPath(next ? pathname : null);
+  }
 
   useEffect(() => {
     const previous = document.body.style.overflow;
