@@ -80,6 +80,19 @@ export default defineSchema({
     .index("by_createdAt", ["createdAt"])
     .index("by_author", ["authorId"]),
 
+  events: defineTable({
+    authorId: v.id("members"),
+    title: v.string(),
+    place: v.string(),
+    summary: v.string(),
+    startsAt: v.optional(v.number()),
+    whenLabel: v.optional(v.string()),
+    status: v.union(v.literal("confirmed"), v.literal("possible"), v.literal("past")),
+    url: v.optional(v.string()),
+    createdAt: v.number(),
+    hidden: v.boolean(),
+  }).index("by_createdAt", ["createdAt"]),
+
   ideaComments: defineTable({
     ideaId: v.id("ideas"),
     authorId: v.id("members"),

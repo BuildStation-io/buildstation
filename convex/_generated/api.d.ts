@@ -10,6 +10,7 @@
 
 import type * as builders from "../builders.js";
 import type * as crons from "../crons.js";
+import type * as events from "../events.js";
 import type * as founders from "../founders.js";
 import type * as github from "../github.js";
 import type * as ideaComments from "../ideaComments.js";
@@ -31,6 +32,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   builders: typeof builders;
   crons: typeof crons;
+  events: typeof events;
   founders: typeof founders;
   github: typeof github;
   ideaComments: typeof ideaComments;
