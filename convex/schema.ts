@@ -61,6 +61,7 @@ export default defineSchema({
   ideas: defineTable({
     authorId: v.id("members"),
     authorName: v.string(),
+    authorAvatarUrl: v.optional(v.string()),
     githubUsername: v.optional(v.string()),
     place: v.string(),
     process: v.string(),
@@ -75,15 +76,20 @@ export default defineSchema({
     projectSlug: v.optional(v.string()),
     createdAt: v.number(),
     hidden: v.boolean(),
-  }).index("by_createdAt", ["createdAt"]),
+  })
+    .index("by_createdAt", ["createdAt"])
+    .index("by_author", ["authorId"]),
 
   ideaComments: defineTable({
     ideaId: v.id("ideas"),
     authorId: v.id("members"),
     authorName: v.string(),
+    authorAvatarUrl: v.optional(v.string()),
     githubUsername: v.optional(v.string()),
     body: v.string(),
     createdAt: v.number(),
     hidden: v.boolean(),
-  }).index("by_idea_and_createdAt", ["ideaId", "createdAt"]),
+  })
+    .index("by_idea_and_createdAt", ["ideaId", "createdAt"])
+    .index("by_author", ["authorId"]),
 });

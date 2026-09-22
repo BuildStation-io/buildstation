@@ -1,6 +1,12 @@
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
-import { ensureMember } from "./lib/auth";
+import {
+  authorSnapshot,
+  ensureMember,
+  httpsAvatar,
+  publishableName,
+  syncAuthoredIdentity,
+} from "./lib/auth";
 
 const LIMITS = {
   place: 160,
@@ -49,6 +55,7 @@ function projectSlug(value: string | undefined) {
 const publicIdea = v.object({
   _id: v.id("ideas"),
   authorName: v.string(),
+  authorAvatarUrl: v.optional(v.string()),
   githubUsername: v.optional(v.string()),
   place: v.string(),
   process: v.string(),
@@ -69,6 +76,7 @@ export const list = query({
       .map((idea) => ({
         _id: idea._id,
         authorName: idea.authorName,
+        ...(idea.authorAvatarUrl ? { authorAvatarUrl: idea.authorAvatarUrl } : {}),
         ...(idea.githubUsername ? { githubUsername: idea.githubUsername } : {}),
         place: idea.place,
         process: idea.process,
@@ -88,6 +96,8 @@ export const viewer = query({
     v.object({
       name: v.string(),
       githubUsername: v.union(v.string(), v.null()),
+      hasName: v.boolean(),
+      avatarUrl: v.optional(v.string()),
     }),
   ),
   handler: async (ctx) => {
@@ -101,16 +111,16 @@ export const viewer = query({
       .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
       .unique();
 
-    if (!member) {
-      return {
-        name: identity.name ?? "Builder",
-        githubUsername: null,
-      };
-    }
+    const name = publishableName(member?.name) ?? publishableName(identity.name) ?? "";
+    const avatarUrl =
+      httpsAvatar(member?.avatarUrl) ??
+      httpsAvatar(typeof identity.pictureUrl === "string" ? identity.pictureUrl : undefined);
 
     return {
-      name: member.name,
-      githubUsername: member.githubUsername ?? null,
+      name,
+      githubUsername: member?.githubUsername ?? null,
+      hasName: Boolean(name),
+      ...(avatarUrl ? { avatarUrl } : {}),
     };
   },
 });
@@ -121,16 +131,22 @@ export const submit = mutation({
     process: v.string(),
     why: v.string(),
     sector: sectorValidator,
+    displayName: v.optional(v.string()),
+    avatarUrl: v.optional(v.string()),
   },
   returns: v.id("ideas"),
   handler: async (ctx, args) => {
-    const member = await ensureMember(ctx);
-    const githubUsername = member.githubUsername?.trim();
+    const member = await ensureMember(ctx, {
+      displayName: args.displayName,
+      avatarUrl: args.avatarUrl,
+    });
+    const author = authorSnapshot(member);
 
     return await ctx.db.insert("ideas", {
       authorId: member._id,
-      authorName: member.name,
-      ...(githubUsername ? { githubUsername } : {}),
+      authorName: author.authorName,
+      ...(author.authorAvatarUrl ? { authorAvatarUrl: author.authorAvatarUrl } : {}),
+      ...(author.githubUsername ? { githubUsername: author.githubUsername } : {}),
       place: requiredText(args.place, LIMITS.place, "Place"),
       process: requiredText(args.process, LIMITS.process, "Process"),
       why: requiredText(args.why, LIMITS.why, "Why"),
@@ -139,6 +155,25 @@ export const submit = mutation({
       createdAt: Date.now(),
       hidden: false,
     });
+  },
+});
+
+export const backfillAuthors = internalMutation({
+  args: {},
+  returns: v.object({
+    patchedIdeas: v.number(),
+    patchedComments: v.number(),
+  }),
+  handler: async (ctx) => {
+    const members = await ctx.db.query("members").collect();
+    let patchedIdeas = 0;
+    let patchedComments = 0;
+    for (const member of members) {
+      const result = await syncAuthoredIdentity(ctx, member);
+      patchedIdeas += result.patchedIdeas;
+      patchedComments += result.patchedComments;
+    }
+    return { patchedIdeas, patchedComments };
   },
 });
 

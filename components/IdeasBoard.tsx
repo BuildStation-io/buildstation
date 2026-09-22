@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import Link from "next/link";
 import { Component, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
@@ -16,6 +16,13 @@ const SECTORS = [
 
 type Sector = (typeof SECTORS)[number]["value"];
 
+const SECTOR_ACCENT: Record<Sector, string> = {
+  construction: "#e85d2a",
+  mining: "#d6a15a",
+  energy: "#f5e6a8",
+  "real estate": "#67e8f9",
+};
+
 const STATUS_LABEL = {
   open: "Open",
   picked: "Picked",
@@ -28,6 +35,7 @@ const field =
 type Idea = {
   _id: Id<"ideas">;
   authorName: string;
+  authorAvatarUrl?: string;
   githubUsername?: string;
   place: string;
   process: string;
@@ -42,6 +50,7 @@ type IdeaComment = {
   _id: Id<"ideaComments">;
   ideaId: Id<"ideas">;
   authorName: string;
+  authorAvatarUrl?: string;
   githubUsername?: string;
   body: string;
   createdAt: number;
@@ -72,6 +81,96 @@ function sectorLabel(sector: Sector) {
   return SECTORS.find((item) => item.value === sector)?.label ?? sector;
 }
 
+function githubHandle(username: string | undefined) {
+  const handle = username?.replace(/^@/, "").trim();
+  return handle || undefined;
+}
+
+function useAuthorDraft() {
+  const { isLoaded: authLoaded, isSignedIn } = useAuth();
+  const { isLoaded: userLoaded, user } = useUser();
+  const viewer = useQuery(api.ideas.viewer, {});
+  const clerkName = user?.fullName?.trim() || user?.firstName?.trim() || "";
+  const savedName = viewer?.hasName ? viewer.name : "";
+  const ready = authLoaded && userLoaded && viewer !== undefined;
+  const needsDisplayName = Boolean(isSignedIn && ready && !clerkName && !savedName);
+  const avatarUrl = user?.imageUrl?.startsWith("https://") ? user.imageUrl : undefined;
+  return { needsDisplayName, avatarUrl };
+}
+
+function AuthorAvatar({ name, url }: { name: string; url?: string }) {
+  if (url) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={url}
+        alt=""
+        className="h-8 w-8 shrink-0 rounded-full border border-line object-cover"
+      />
+    );
+  }
+  return (
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line font-mono text-[11px]">
+      {name.slice(0, 1).toUpperCase()}
+    </span>
+  );
+}
+
+function AuthorRow({
+  name,
+  githubUsername,
+  avatarUrl,
+}: {
+  name: string;
+  githubUsername?: string;
+  avatarUrl?: string;
+}) {
+  const handle = githubHandle(githubUsername);
+  return (
+    <div className="flex items-center gap-3">
+      <AuthorAvatar name={name} url={avatarUrl} />
+      <div className="min-w-0">
+        <p className="truncate text-sm font-medium">{name}</p>
+        {handle ? (
+          <a
+            href={`https://github.com/${handle}`}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-[12px] text-muted hover:text-foreground"
+          >
+            @{handle}
+          </a>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function DisplayNameField({
+  value,
+  disabled,
+  onChange,
+}: {
+  value: string;
+  disabled?: boolean;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="grid gap-1.5 text-sm">
+      <span className="font-mono text-xs uppercase tracking-widest text-muted">Your name</span>
+      <input
+        required
+        disabled={disabled}
+        className={field}
+        value={value}
+        maxLength={40}
+        placeholder="How you want to appear"
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
 function CommentList({ comments }: { comments: IdeaComment[] }) {
   if (comments.length === 0) {
     return <p className="text-sm text-muted">No replies yet.</p>;
@@ -79,38 +178,34 @@ function CommentList({ comments }: { comments: IdeaComment[] }) {
 
   return (
     <ul className="grid gap-4">
-      {comments.map((comment) => {
-        const handle = comment.githubUsername?.replace(/^@/, "");
-        return (
-          <li key={comment._id} className="border-t border-line pt-4">
-            <p className="text-sm">
-              <span className="font-medium">{comment.authorName}</span>
-              {handle ? (
-                <a
-                  href={`https://github.com/${handle}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="ml-2 font-mono text-[12px] text-muted hover:text-foreground"
-                >
-                  @{handle}
-                </a>
-              ) : null}
-              <time className="ml-2 font-mono text-[11px] text-muted" dateTime={new Date(comment.createdAt).toISOString()}>
-                {formatWhen(comment.createdAt)}
-              </time>
-            </p>
-            <p className="mt-2 text-sm leading-6">{comment.body}</p>
-          </li>
-        );
-      })}
+      {comments.map((comment) => (
+        <li key={comment._id} className="border-t border-line pt-4">
+          <div className="flex items-start justify-between gap-3">
+            <AuthorRow
+              name={comment.authorName}
+              githubUsername={comment.githubUsername}
+              avatarUrl={comment.authorAvatarUrl}
+            />
+            <time
+              className="shrink-0 font-mono text-[11px] text-muted"
+              dateTime={new Date(comment.createdAt).toISOString()}
+            >
+              {formatWhen(comment.createdAt)}
+            </time>
+          </div>
+          <p className="mt-3 text-sm leading-6 text-muted">{comment.body}</p>
+        </li>
+      ))}
     </ul>
   );
 }
 
 function ReplyBox({ ideaId }: { ideaId: Id<"ideas"> }) {
   const { isLoaded, isSignedIn } = useAuth();
+  const { needsDisplayName, avatarUrl } = useAuthorDraft();
   const addComment = useMutation(api.ideaComments.add);
   const [body, setBody] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -131,14 +226,26 @@ function ReplyBox({ ideaId }: { ideaId: Id<"ideas"> }) {
       className="grid gap-3"
       onSubmit={(event) => {
         event.preventDefault();
+        if (needsDisplayName && !displayName.trim()) {
+          setError("Add the name you want on the card.");
+          return;
+        }
         setPending(true);
         setError(null);
-        void addComment({ ideaId, body })
+        void addComment({
+          ideaId,
+          body,
+          ...(needsDisplayName ? { displayName: displayName.trim() } : {}),
+          ...(avatarUrl ? { avatarUrl } : {}),
+        })
           .then(() => setBody(""))
           .catch((reason: unknown) => setError(readableError(reason)))
           .finally(() => setPending(false));
       }}
     >
+      {needsDisplayName ? (
+        <DisplayNameField value={displayName} disabled={pending} onChange={setDisplayName} />
+      ) : null}
       <label className="grid gap-1.5 text-sm">
         <span className="font-mono text-xs uppercase tracking-widest text-muted">Reply</span>
         <textarea
@@ -164,35 +271,34 @@ function ReplyBox({ ideaId }: { ideaId: Id<"ideas"> }) {
 }
 
 function IdeaCard({ idea, comments }: { idea: Idea; comments: IdeaComment[] }) {
-  const handle = idea.githubUsername?.replace(/^@/, "");
+  const accent = SECTOR_ACCENT[idea.sector];
 
   return (
-    <article className="flex flex-col gap-4 border-b border-r border-line p-8">
+    <article
+      data-goo-target
+      data-goo-color={accent}
+      className="relative flex min-h-[280px] flex-col border-b border-r border-line p-6 sm:p-8"
+    >
+      <span aria-hidden className="absolute inset-x-0 top-0 h-px" style={{ background: accent }} />
       <div className="flex items-center justify-between gap-4">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
           {sectorLabel(idea.sector)}
         </p>
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
           {STATUS_LABEL[idea.status]}
         </p>
       </div>
-      <h2 className="text-2xl font-medium tracking-tight">{idea.place}</h2>
-      <p className="text-sm leading-6">{idea.process}</p>
-      <p className="text-sm leading-6 text-muted">{idea.why}</p>
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
-        <p className="text-sm">
-          <span className="font-medium">{idea.authorName}</span>
-          {handle ? (
-            <a
-              href={`https://github.com/${handle}`}
-              target="_blank"
-              rel="noreferrer"
-              className="ml-2 font-mono text-[12px] text-muted hover:text-foreground"
-            >
-              @{handle}
-            </a>
-          ) : null}
-        </p>
+      <h2 className="mt-5 text-2xl font-medium tracking-tight">{idea.place}</h2>
+      <div className="mt-4 space-y-3 text-sm leading-6 text-muted">
+        <p>{idea.process}</p>
+        <p>{idea.why}</p>
+      </div>
+      <div className="mt-auto flex flex-col gap-5 pt-8">
+        <AuthorRow
+          name={idea.authorName}
+          githubUsername={idea.githubUsername}
+          avatarUrl={idea.authorAvatarUrl}
+        />
         {idea.status === "shipped" && idea.projectSlug ? (
           <Link
             href={`/projects#${idea.projectSlug}`}
@@ -205,11 +311,11 @@ function IdeaCard({ idea, comments }: { idea: Idea; comments: IdeaComment[] }) {
             This became a project
           </p>
         ) : null}
-      </div>
-      <div className="mt-2 grid gap-4 border-t border-line pt-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Thread</p>
-        <CommentList comments={comments} />
-        <ReplyBox ideaId={idea._id} />
+        <div className="grid gap-4 border-t border-line pt-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Thread</p>
+          <CommentList comments={comments} />
+          <ReplyBox ideaId={idea._id} />
+        </div>
       </div>
     </article>
   );
@@ -218,19 +324,28 @@ function IdeaCard({ idea, comments }: { idea: Idea; comments: IdeaComment[] }) {
 function IdeaForm({
   canPost,
   showAuthActions,
+  needsDisplayName,
   pending,
   error,
   onSubmit,
 }: {
   canPost: boolean;
   showAuthActions: boolean;
+  needsDisplayName: boolean;
   pending: boolean;
   error: string | null;
-  onSubmit: (form: { place: string; process: string; why: string; sector: Sector }) => void;
+  onSubmit: (form: {
+    place: string;
+    process: string;
+    why: string;
+    sector: Sector;
+    displayName?: string;
+  }) => void;
 }) {
   const [place, setPlace] = useState("");
   const [process, setProcess] = useState("");
   const [why, setWhy] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [sector, setSector] = useState<Sector>("construction");
 
   const update =
@@ -243,11 +358,20 @@ function IdeaForm({
     if (!canPost) {
       return;
     }
-    onSubmit({ place, process, why, sector });
+    onSubmit({
+      place,
+      process,
+      why,
+      sector,
+      ...(needsDisplayName ? { displayName } : {}),
+    });
   }
 
   return (
     <form className="grid gap-4" onSubmit={submit}>
+      {needsDisplayName ? (
+        <DisplayNameField value={displayName} disabled={!canPost || pending} onChange={setDisplayName} />
+      ) : null}
       <label className="grid gap-1.5 text-sm">
         <span className="font-mono text-xs uppercase tracking-widest text-muted">Sector</span>
         <select
@@ -353,7 +477,7 @@ function Board({
     );
   }
   return (
-    <div className="grid grid-cols-1">
+    <div className="grid grid-cols-1 sm:grid-cols-2">
       {ideas.map((idea) => (
         <IdeaCard
           key={idea._id}
@@ -395,6 +519,7 @@ class IdeaListBoundary extends Component<{ children: ReactNode }, { failed: bool
 
 function LiveBoard() {
   const { isLoaded, isSignedIn } = useAuth();
+  const { needsDisplayName, avatarUrl } = useAuthorDraft();
   const submitIdea = useMutation(api.ideas.submit);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -415,15 +540,27 @@ function LiveBoard() {
           <IdeaForm
             canPost={canPost}
             showAuthActions={!canPost}
+            needsDisplayName={needsDisplayName}
             pending={pending}
             error={error}
             onSubmit={(form) => {
               if (!canPost) {
                 return;
               }
+              if (needsDisplayName && !form.displayName?.trim()) {
+                setError("Add the name you want on the card.");
+                return;
+              }
               setPending(true);
               setError(null);
-              void submitIdea(form)
+              void submitIdea({
+                place: form.place,
+                process: form.process,
+                why: form.why,
+                sector: form.sector,
+                ...(form.displayName?.trim() ? { displayName: form.displayName.trim() } : {}),
+                ...(avatarUrl ? { avatarUrl } : {}),
+              })
                 .then(() => setPosted(true))
                 .catch((reason: unknown) => {
                   setError(readableError(reason));
@@ -490,6 +627,7 @@ export function IdeasBoard() {
           <IdeaForm
             canPost={false}
             showAuthActions
+            needsDisplayName={false}
             pending={false}
             error={null}
             onSubmit={() => undefined}
