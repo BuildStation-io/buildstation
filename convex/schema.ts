@@ -57,4 +57,23 @@ export default defineSchema({
     createdAt: v.number(),
     source: v.string(),
   }),
+
+  ideas: defineTable({
+    authorId: v.id("members"),
+    authorName: v.string(),
+    githubUsername: v.optional(v.string()),
+    place: v.string(),
+    process: v.string(),
+    why: v.string(),
+    sector: v.union(
+      v.literal("construction"),
+      v.literal("mining"),
+      v.literal("energy"),
+      v.literal("real estate"),
+    ),
+    status: v.union(v.literal("open"), v.literal("picked"), v.literal("shipped")),
+    projectSlug: v.optional(v.string()),
+    createdAt: v.number(),
+    hidden: v.boolean(),
+  }).index("by_createdAt", ["createdAt"]),
 });

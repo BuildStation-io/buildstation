@@ -18,6 +18,9 @@ export function Footer() {
           <Link href="/members" className="hover:text-foreground">
             Builders
           </Link>
+          <Link href="/ideas" className="hover:text-foreground">
+            Ideas
+          </Link>
           <Link href="/projects" className="hover:text-foreground">
             Projects
           </Link>

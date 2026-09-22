@@ -14,9 +14,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <article
+      id={project.slug}
       data-goo-target
       data-goo-color={project.accent}
-      className="relative flex min-h-[280px] flex-col border-b border-r border-line p-6 sm:p-8"
+      className="relative flex min-h-[280px] scroll-mt-24 flex-col border-b border-r border-line p-6 sm:p-8"
     >
       <span
         aria-hidden

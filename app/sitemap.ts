@@ -6,6 +6,7 @@ const STATIC_PATHS = [
   "/",
   "/team",
   "/members",
+  "/ideas",
   "/projects",
   "/blog",
   "/build-lab",
