@@ -76,4 +76,14 @@ export default defineSchema({
     createdAt: v.number(),
     hidden: v.boolean(),
   }).index("by_createdAt", ["createdAt"]),
+
+  ideaComments: defineTable({
+    ideaId: v.id("ideas"),
+    authorId: v.id("members"),
+    authorName: v.string(),
+    githubUsername: v.optional(v.string()),
+    body: v.string(),
+    createdAt: v.number(),
+    hidden: v.boolean(),
+  }).index("by_idea_and_createdAt", ["ideaId", "createdAt"]),
 });

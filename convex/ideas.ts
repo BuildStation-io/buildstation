@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
-import { getCurrentMember } from "./lib/auth";
+import { ensureMember } from "./lib/auth";
 
 const LIMITS = {
   place: 160,
@@ -124,12 +124,7 @@ export const submit = mutation({
   },
   returns: v.id("ideas"),
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
-
-    const member = await getCurrentMember(ctx);
+    const member = await ensureMember(ctx);
     const githubUsername = member.githubUsername?.trim();
 
     return await ctx.db.insert("ideas", {

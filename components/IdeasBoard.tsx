@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "convex/react";
 import Link from "next/link";
 import { Component, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 
 const SECTORS = [
   { value: "construction", label: "Construction" },
@@ -25,7 +26,7 @@ const field =
   "w-full rounded-md border border-line bg-surface px-3 py-2.5 text-sm text-foreground placeholder:text-muted/60 focus:border-muted focus:outline-none disabled:opacity-60";
 
 type Idea = {
-  _id: string;
+  _id: Id<"ideas">;
   authorName: string;
   githubUsername?: string;
   place: string;
@@ -37,11 +38,132 @@ type Idea = {
   createdAt: number;
 };
 
+type IdeaComment = {
+  _id: Id<"ideaComments">;
+  ideaId: Id<"ideas">;
+  authorName: string;
+  githubUsername?: string;
+  body: string;
+  createdAt: number;
+};
+
+function readableError(reason: unknown) {
+  const raw = reason instanceof Error ? reason.message : "Could not save that.";
+  const lines = raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("[CONVEX") && !line.startsWith("[Request ID"));
+  const server = lines.find((line) => line !== "Server Error");
+  return (server ?? raw).replace(/^Uncaught Error:\s*/, "");
+}
+
+function formatWhen(createdAt: number) {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "UTC",
+  }).format(createdAt);
+}
+
 function sectorLabel(sector: Sector) {
   return SECTORS.find((item) => item.value === sector)?.label ?? sector;
 }
 
-function IdeaCard({ idea }: { idea: Idea }) {
+function CommentList({ comments }: { comments: IdeaComment[] }) {
+  if (comments.length === 0) {
+    return <p className="text-sm text-muted">No replies yet.</p>;
+  }
+
+  return (
+    <ul className="grid gap-4">
+      {comments.map((comment) => {
+        const handle = comment.githubUsername?.replace(/^@/, "");
+        return (
+          <li key={comment._id} className="border-t border-line pt-4">
+            <p className="text-sm">
+              <span className="font-medium">{comment.authorName}</span>
+              {handle ? (
+                <a
+                  href={`https://github.com/${handle}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ml-2 font-mono text-[12px] text-muted hover:text-foreground"
+                >
+                  @{handle}
+                </a>
+              ) : null}
+              <time className="ml-2 font-mono text-[11px] text-muted" dateTime={new Date(comment.createdAt).toISOString()}>
+                {formatWhen(comment.createdAt)}
+              </time>
+            </p>
+            <p className="mt-2 text-sm leading-6">{comment.body}</p>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function ReplyBox({ ideaId }: { ideaId: Id<"ideas"> }) {
+  const { isLoaded, isSignedIn } = useAuth();
+  const addComment = useMutation(api.ideaComments.add);
+  const [body, setBody] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  if (!isLoaded) {
+    return null;
+  }
+
+  if (!isSignedIn) {
+    return (
+      <Link href="/sign-in" className="text-sm text-foreground hover:underline">
+        Sign in
+      </Link>
+    );
+  }
+
+  return (
+    <form
+      className="grid gap-3"
+      onSubmit={(event) => {
+        event.preventDefault();
+        setPending(true);
+        setError(null);
+        void addComment({ ideaId, body })
+          .then(() => setBody(""))
+          .catch((reason: unknown) => setError(readableError(reason)))
+          .finally(() => setPending(false));
+      }}
+    >
+      <label className="grid gap-1.5 text-sm">
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">Reply</span>
+        <textarea
+          required
+          rows={3}
+          maxLength={2000}
+          className={field}
+          value={body}
+          onChange={(event) => setBody(event.target.value)}
+          placeholder="Add to the thread"
+        />
+      </label>
+      {error ? <p className="text-sm text-muted">{error}</p> : null}
+      <button
+        type="submit"
+        disabled={pending}
+        className="inline-flex h-11 w-fit items-center rounded-full bg-foreground px-5 text-sm font-medium text-background disabled:opacity-60"
+      >
+        {pending ? "Posting…" : "Reply"}
+      </button>
+    </form>
+  );
+}
+
+function IdeaCard({ idea, comments }: { idea: Idea; comments: IdeaComment[] }) {
   const handle = idea.githubUsername?.replace(/^@/, "");
 
   return (
@@ -83,6 +205,11 @@ function IdeaCard({ idea }: { idea: Idea }) {
             This became a project
           </p>
         ) : null}
+      </div>
+      <div className="mt-2 grid gap-4 border-t border-line pt-5">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Thread</p>
+        <CommentList comments={comments} />
+        <ReplyBox ideaId={idea._id} />
       </div>
     </article>
   );
@@ -205,8 +332,14 @@ function IdeaForm({
   );
 }
 
-function Board({ ideas }: { ideas: Idea[] | undefined }) {
-  if (ideas === undefined) {
+function Board({
+  ideas,
+  comments,
+}: {
+  ideas: Idea[] | undefined;
+  comments: IdeaComment[] | undefined;
+}) {
+  if (ideas === undefined || comments === undefined) {
     return <p className="px-5 py-16 text-sm text-muted">Loading ideas…</p>;
   }
   if (ideas.length === 0) {
@@ -220,9 +353,13 @@ function Board({ ideas }: { ideas: Idea[] | undefined }) {
     );
   }
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2">
+    <div className="grid grid-cols-1">
       {ideas.map((idea) => (
-        <IdeaCard key={idea._id} idea={idea} />
+        <IdeaCard
+          key={idea._id}
+          idea={idea}
+          comments={comments.filter((comment) => comment.ideaId === idea._id)}
+        />
       ))}
     </div>
   );
@@ -230,19 +367,27 @@ function Board({ ideas }: { ideas: Idea[] | undefined }) {
 
 function IdeaList() {
   const ideas = useQuery(api.ideas.list, {});
-  return <Board ideas={ideas} />;
+  const comments = useQuery(api.ideaComments.list, {});
+  return <Board ideas={ideas} comments={comments} />;
 }
 
-class IdeaListBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
+class IdeaListBoundary extends Component<{ children: ReactNode }, { failed: boolean; message: string | null }> {
+  state = { failed: false, message: null as string | null };
 
-  static getDerivedStateFromError() {
-    return { failed: true };
+  static getDerivedStateFromError(error: Error) {
+    return { failed: true, message: readableError(error) };
   }
 
   render() {
     if (this.state.failed) {
-      return <Board ideas={[]} />;
+      return (
+        <div className="px-6 py-16">
+          <p className="text-2xl font-medium tracking-tight">The board could not load.</p>
+          {this.state.message ? (
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">{this.state.message}</p>
+          ) : null}
+        </div>
+      );
     }
     return this.props.children;
   }
@@ -281,12 +426,7 @@ function LiveBoard() {
               void submitIdea(form)
                 .then(() => setPosted(true))
                 .catch((reason: unknown) => {
-                  const message = reason instanceof Error ? reason.message : "";
-                  if (message.includes("must be between")) {
-                    setError(message.replace(/^Uncaught Error:\s*/, ""));
-                    return;
-                  }
-                  setError("Sign in to post an idea. Your account has to finish syncing first.");
+                  setError(readableError(reason));
                 })
                 .finally(() => setPending(false));
             }}
