@@ -1,3 +1,8 @@
+export type TeamCompany = {
+  name: string;
+  logoUrl: string;
+};
+
 export type TeamMember = {
   name: string;
   role: string;
@@ -5,6 +10,7 @@ export type TeamMember = {
   githubUsername: string;
   bio: string;
   avatarUrl: string;
+  company: TeamCompany;
 };
 
 export const TEAM: TeamMember[] = [
@@ -15,6 +21,7 @@ export const TEAM: TeamMember[] = [
     githubUsername: "Andy18acaro",
     bio: "Constructor applying AI to infrastructure projects: construction, mining, energy, and real estate.",
     avatarUrl: "https://github.com/Andy18acaro.png",
+    company: { name: "Unitelec", logoUrl: "/companies/unitelec.png" },
   },
   {
     name: "Alex Rodrigo Salhua Vicuña",
@@ -23,6 +30,7 @@ export const TEAM: TeamMember[] = [
     githubUsername: "Alex10114",
     bio: "Founder. Building AI for infrastructure projects with the team.",
     avatarUrl: "/team/alex-pixel.png",
+    company: { name: "Unitelec", logoUrl: "/companies/unitelec.png" },
   },
   {
     name: "Coralie Figueroa",
@@ -31,6 +39,7 @@ export const TEAM: TeamMember[] = [
     githubUsername: "coraliefigue11",
     bio: "Cofounder. Building AI for infrastructure projects with the team.",
     avatarUrl: "https://github.com/coraliefigue11.png",
+    company: { name: "GCAQ", logoUrl: "/companies/gcaq.png" },
   },
   {
     name: "Franklin Rosas",
@@ -39,6 +48,7 @@ export const TEAM: TeamMember[] = [
     githubUsername: "Franklin-Rosas",
     bio: "Cofounder. Building AI for infrastructure projects with the team.",
     avatarUrl: "https://github.com/Franklin-Rosas.png",
+    company: { name: "Valtana", logoUrl: "/companies/valtana.png" },
   },
 ];
 

@@ -21,7 +21,7 @@ export function TeamDirectory() {
           {TEAM.map((person) => (
             <article
               key={person.githubUsername}
-              className="flex flex-col items-center gap-5 border-b border-r border-line px-6 py-12 text-center"
+              className="flex h-full flex-col items-center gap-5 border-b border-r border-line px-6 py-12 text-center"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -35,6 +35,14 @@ export function TeamDirectory() {
                   {person.role}
                 </p>
                 <p className="mt-2 text-sm text-muted">{person.location}</p>
+              </div>
+              <div className="mt-auto flex h-12 w-full max-w-[9.75rem] items-center justify-center rounded-md bg-[#e8e5e0] px-2.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={person.company.logoUrl}
+                  alt={person.company.name}
+                  className="max-h-9 w-auto max-w-full object-contain"
+                />
               </div>
             </article>
           ))}
