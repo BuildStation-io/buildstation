@@ -34,10 +34,10 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: "Coralie Figueroa",
-    role: "Cofounder",
+    role: "Founder",
     location: "Peru",
     githubUsername: "coraliefigue11",
-    bio: "Cofounder. Building AI for infrastructure projects with the team.",
+    bio: "Founder. Building AI for infrastructure projects with the team.",
     avatarUrl: "https://github.com/coraliefigue11.png",
     company: { name: "GCAQ", logoUrl: "/companies/gcaq.png" },
   },
