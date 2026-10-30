@@ -27,6 +27,14 @@ export const metadata: Metadata = {
   description:
     "Comunidad que aplica inteligencia artificial a construcción, minería, energía y real estate. Desde Lima, construyendo para LatAm.",
   applicationName: "BuildStation",
+  openGraph: {
+    type: "website",
+    locale: "es_PE",
+    siteName: "BuildStation",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
   icons: {
     icon: "/brand/favicon.png",
     apple: "/brand/favicon.png",
