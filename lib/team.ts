@@ -46,7 +46,7 @@ export const team: TeamMember[] = [
     name: "Franklin Rosas",
     role: "Founder",
     location: "Perú",
-    image: "/team/github-franklin-rosas-20261030.webp",
+    image: "/team/github-franklin-rosas-20261030-v2.webp",
     company: { name: "GRAPCO S.A.C.", logo: "/companies/grapco.png", width: 260, height: 65 },
     github: "https://github.com/Franklin-Rosas",
   },
