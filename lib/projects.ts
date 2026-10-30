@@ -17,6 +17,8 @@ export type Project = {
   accent: string;
   featured: boolean;
   language?: string;
+  category?: string;
+  preview?: { src: string; alt: string; caption: string };
 };
 
 export const SEED_PROJECTS: Project[] = [
@@ -24,7 +26,13 @@ export const SEED_PROJECTS: Project[] = [
     slug: "inmonexo",
     name: "InmoNExo",
     description:
-      "Open-source real estate market intelligence for Lima. Scrapes public supply, normalizes pricing and history, and exposes an API plus dashboard. Published so anyone can see how the network builds.",
+      "Inteligencia del mercado inmobiliario de Lima. Reúne oferta pública, organiza precios e historial y los acerca a los builders a través de una API y un dashboard.",
+    category: "REAL ESTATE",
+    preview: {
+      src: "/projects/inmonexo-dashboard.webp",
+      alt: "Dashboard de InmoNExo con cobertura del mercado inmobiliario de Lima, distribución por distrito y estados de los proyectos.",
+      caption: "Dashboard público · Captura de octubre de 2026",
+    },
     kind: "oss",
     liveUrl: "https://inmonexo-xi.vercel.app",
     githubRepo: "Andy18acaro/InmoNExo",
@@ -37,19 +45,25 @@ export const SEED_PROJECTS: Project[] = [
     ],
     accent: "#67e8f9",
     featured: true,
-    language: "TypeScript",
+    language: "Python",
   },
   {
     slug: "aiconstructor",
     name: "AIConstructor",
     description:
-      "Mobile-first pre-construction assistant for Lima: anonymous assessment, grounded normative answers, saved cases, and a verified professional directory. It does not certify a home.",
+      "Asistente de preconstrucción pensado para el móvil y el contexto de Lima: evaluación anónima, orientación con fuentes normativas, casos guardados y directorio profesional. No certifica viviendas.",
+    category: "CONSTRUCCIÓN + IA",
+    preview: {
+      src: "/projects/aiconstructor-app.webp",
+      alt: "Portada de AIConstructor con orientación de preconstrucción y acceso a la evaluación del proyecto.",
+      caption: "Demo local · Captura del repositorio oficial",
+    },
     kind: "oss",
     githubRepo: "Andy18acaro/AIConstructor",
     visible: true,
     needs: [],
     accent: "#e85d2a",
-    featured: false,
+    featured: true,
     language: "JavaScript",
   },
 ];

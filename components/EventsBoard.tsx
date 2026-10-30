@@ -4,18 +4,19 @@ import { useMutation, useQuery } from "convex/react";
 import { Component, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { catalogEvents, type EventStatus, type NetworkEvent } from "@/lib/events";
+import { catalogEvents, type EventStatus } from "@/lib/events";
+import type { EventRow } from "@/lib/data";
+import { isPastEvent, mergeEventRows, toEventRow } from "@/lib/event-feed";
+import EventCard from "./EventCard";
+import BuildPass from "./BuildPass";
+import EventsExplorer from "./EventsExplorer";
+import Icon from "./Icon";
+import Link from "next/link";
 
 const STATUS_LABEL: Record<EventStatus, string> = {
-  confirmed: "Confirmed",
-  possible: "Possible",
-  past: "Past",
-};
-
-const STATUS_ACCENT: Record<EventStatus, string> = {
-  confirmed: "#67e8f9",
-  possible: "#f5e6a8",
-  past: "#737373",
+  confirmed: "Confirmado",
+  possible: "Por confirmar",
+  past: "Pasado",
 };
 
 const field =
@@ -31,67 +32,23 @@ function readableError(reason: unknown) {
   return (server ?? raw).replace(/^Uncaught Error:\s*/, "");
 }
 
-function formatWhen(event: NetworkEvent) {
-  if (event.startsAt !== undefined) {
-    return new Intl.DateTimeFormat("en", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      timeZone: "UTC",
-    }).format(event.startsAt);
-  }
-  return event.whenLabel?.trim() || "Date TBA";
-}
-
-function EventCard({
+function EditableEventCard({
   event,
-  canEdit,
+  past,
 }: {
-  event: NetworkEvent;
-  canEdit: boolean;
+  event: EventRow;
+  past: boolean;
 }) {
   const setStatus = useMutation(api.events.setStatus);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const accent = STATUS_ACCENT[event.status];
 
   return (
-    <article
-      data-goo-target
-      data-goo-color={accent}
-      className="relative flex min-h-[280px] flex-col border-b border-r border-line p-6 sm:p-8"
-    >
-      <span aria-hidden className="absolute inset-x-0 top-0 h-px" style={{ background: accent }} />
-      <div className="flex items-center justify-between gap-4">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-          {formatWhen(event)}
-        </p>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-          {STATUS_LABEL[event.status]}
-        </p>
-      </div>
-      <h2 className="mt-5 text-2xl font-medium tracking-tight">{event.title}</h2>
-      <div className="mt-4 space-y-3 text-sm leading-6 text-muted">
-        <p>{event.place}</p>
-        <p>{event.summary}</p>
-      </div>
-      <div className="mt-auto flex flex-col gap-4 pt-8">
-        {event.url ? (
-          <a
-            href={event.url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center justify-between text-sm hover:text-foreground"
-          >
-            Open details
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-line">
-              ↗
-            </span>
-          </a>
-        ) : null}
-        {canEdit && event.id ? (
+    <div className="editable-event">
+      <EventCard event={event} past={past} />
+      <div className="event-editor">
           <label className="grid gap-1.5 text-sm">
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Status</span>
+            <span className="eyebrow">Estado · {event.title}</span>
             <select
               className={field}
               value={event.status}
@@ -114,11 +71,10 @@ function EventCard({
                 </option>
               ))}
             </select>
-            {error ? <p className="text-sm text-muted">{error}</p> : null}
+             {error ? <p role="alert" className="text-sm text-muted">{error}</p> : null}
           </label>
-        ) : null}
       </div>
-    </article>
+    </div>
   );
 }
 
@@ -169,65 +125,65 @@ function EventForm({
   return (
     <form className="grid gap-4" onSubmit={submit}>
       <label className="grid gap-1.5 text-sm">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted">Title</span>
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">Título</span>
         <input
           required
           className={field}
           value={title}
           maxLength={120}
-          placeholder="What the network is gathering for"
+          placeholder="¿Para qué nos encontramos?"
           onChange={update(setTitle)}
         />
       </label>
       <label className="grid gap-1.5 text-sm">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted">Place</span>
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">Lugar</span>
         <input
           required
           className={field}
           value={place}
           maxLength={160}
-          placeholder="City, room, or link location"
+          placeholder="Ciudad, espacio o encuentro online"
           onChange={update(setPlace)}
         />
       </label>
       <label className="grid gap-1.5 text-sm">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted">Summary</span>
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">Descripción</span>
         <textarea
           required
           rows={4}
           className={field}
           value={summary}
           maxLength={2000}
-          placeholder="Who it is for and what happens"
+          placeholder="Para quién es y qué haremos"
           onChange={update(setSummary)}
         />
       </label>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-1.5 text-sm">
-          <span className="font-mono text-xs uppercase tracking-widest text-muted">Status</span>
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">Estado</span>
           <select className={field} value={status} onChange={(change) => setStatus(change.target.value as EventStatus)}>
-            <option value="possible">Possible</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="past">Past</option>
+            <option value="possible">Por confirmar</option>
+            <option value="confirmed">Confirmado</option>
+            <option value="past">Pasado</option>
           </select>
         </label>
         <label className="grid gap-1.5 text-sm">
-          <span className="font-mono text-xs uppercase tracking-widest text-muted">Day</span>
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">Día</span>
           <input className={field} type="date" value={day} onChange={update(setDay)} />
         </label>
       </div>
       <label className="grid gap-1.5 text-sm">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted">Date label</span>
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">Fecha aproximada (opcional)</span>
         <input
           className={field}
           value={whenLabel}
           maxLength={80}
-          placeholder="Date TBA"
+          placeholder="Fecha por confirmar"
           onChange={update(setWhenLabel)}
         />
       </label>
       <label className="grid gap-1.5 text-sm">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted">Details link</span>
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">Enlace de detalles o Luma</span>
         <input
           className={field}
           value={url}
@@ -236,13 +192,13 @@ function EventForm({
           onChange={update(setUrl)}
         />
       </label>
-      {error ? <p className="text-sm text-muted">{error}</p> : null}
+      {error ? <p role="alert" className="text-sm text-muted">{error}</p> : null}
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-11 w-fit items-center rounded-full bg-foreground px-5 text-sm font-medium text-background disabled:opacity-60"
+        className="button button-primary w-fit"
       >
-        {pending ? "Posting…" : "Post the date"}
+        {pending ? "Publicando…" : "Publicar encuentro"}
       </button>
     </form>
   );
@@ -251,34 +207,36 @@ function EventForm({
 function Board({
   events,
   canEdit,
+  now,
 }: {
-  events: NetworkEvent[] | undefined;
+  events: EventRow[] | undefined;
   canEdit: boolean;
+  now: number;
 }) {
   if (events === undefined) {
-    return <p className="px-5 py-16 text-sm text-muted">Loading dates…</p>;
+    return <p role="status" className="px-5 py-16 text-sm text-muted">Actualizando la agenda…</p>;
   }
   if (events.length === 0) {
     return (
       <div className="px-6 py-16 text-center">
-        <p className="text-2xl font-medium tracking-tight">No dates yet.</p>
+        <p className="text-2xl font-medium tracking-tight">Lo próximo lo construimos juntos.</p>
         <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-muted">
-          Confirmed and possible gatherings will show up here.
+          Aquí aparecerán los próximos encuentros de la comunidad.
         </p>
       </div>
     );
   }
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2">
-      {events.map((event) => (
-        <EventCard key={event.id ?? eventMatchKeySafe(event)} event={event} canEdit={canEdit} />
-      ))}
-    </div>
+    <EventsExplorer items={events.map((event) => ({
+      id: event.id,
+      title: event.title,
+      location: event.location ?? "",
+      past: isPastEvent(event, now),
+      card: canEdit && event.source === "convex"
+        ? <EditableEventCard event={event} past={isPastEvent(event, now)} />
+        : <EventCard event={event} past={isPastEvent(event, now)} />,
+    }))} />
   );
-}
-
-function eventMatchKeySafe(event: NetworkEvent) {
-  return `${event.title}-${event.startsAt ?? event.whenLabel ?? "tba"}-${event.createdAt}`;
 }
 
 class EventListBoundary extends Component<{ children: ReactNode }, { failed: boolean; message: string | null }> {
@@ -292,10 +250,8 @@ class EventListBoundary extends Component<{ children: ReactNode }, { failed: boo
     if (this.state.failed) {
       return (
         <div className="px-6 py-16">
-          <p className="text-2xl font-medium tracking-tight">The board could not load.</p>
-          {this.state.message ? (
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted">{this.state.message}</p>
-          ) : null}
+          <p role="status" className="text-2xl font-medium tracking-tight">No pudimos actualizar la agenda.</p>
+          <p className="mt-4 text-muted">Vuelve a cargar la página en unos minutos.</p>
         </div>
       );
     }
@@ -303,7 +259,9 @@ class EventListBoundary extends Component<{ children: ReactNode }, { failed: boo
   }
 }
 
-function LiveBoard() {
+type BoardProps = { external: EventRow[]; calendarUrl: string | null; unavailable: boolean; now: number };
+
+function LiveBoard({ external, calendarUrl, unavailable, now }: BoardProps) {
   const remote = useQuery(api.events.list, {});
   const viewer = useQuery(api.events.viewer, {});
   const submitEvent = useMutation(api.events.submit);
@@ -311,21 +269,24 @@ function LiveBoard() {
   const [error, setError] = useState<string | null>(null);
   const [posted, setPosted] = useState(false);
   const isFounder = viewer?.isFounder === true;
-  const events = remote === undefined ? undefined : catalogEvents(remote);
+  const events = mergeEventRows(catalogEvents(remote).map(toEventRow), external);
 
   return (
     <EventsLayout
+      featured={events.find((event) => !isPastEvent(event, now))}
+      calendarUrl={calendarUrl}
+      unavailable={unavailable}
       showForm={isFounder}
       form={
         posted ? (
-          <p className="text-lg font-medium tracking-tight">The date is on the board.</p>
+          <div role="status"><p className="text-lg font-medium tracking-tight">El encuentro ya está en la agenda.</p><button className="text-link" onClick={() => setPosted(false)}>Publicar otro encuentro ↗</button></div>
         ) : (
           <EventForm
             pending={pending}
             error={error}
             onSubmit={(form) => {
               if (form.status === "confirmed" && form.startsAt === undefined) {
-                setError("A confirmed date needs a day.");
+                setError("Un encuentro confirmado necesita un día.");
                 return;
               }
               setPending(true);
@@ -340,7 +301,7 @@ function LiveBoard() {
       }
       dates={
         <EventListBoundary>
-          <Board events={events} canEdit={isFounder} />
+          <Board events={remote === undefined && !events.length ? undefined : events} canEdit={isFounder} now={now} />
         </EventListBoundary>
       }
     />
@@ -351,49 +312,52 @@ function EventsLayout({
   dates,
   form,
   showForm,
+  featured,
+  calendarUrl,
+  unavailable,
 }: {
   dates: ReactNode;
   form: ReactNode;
   showForm: boolean;
+  featured?: EventRow;
+  calendarUrl?: string | null;
+  unavailable?: boolean;
 }) {
   return (
-    <>
-      <section className="mx-auto w-full max-w-6xl px-5 pb-16 pt-24 sm:pt-32">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">Events</p>
-        <h1 className="mt-6 max-w-4xl text-5xl font-medium leading-[0.95] tracking-tight sm:text-7xl">
-          Dates for the network.
-        </h1>
-        <p className="mt-8 max-w-2xl text-lg leading-8 text-muted">
-          Confirmed and possible gatherings. There is no signup list. If a date has a link, it only
-          opens the details.
-        </p>
+    <div className="site-container events-page">
+      <header className="events-hero"><div><p className="eyebrow"><span className="status-dot" /> BUILDSTATION / ENCUENTROS</p><h1>Buen código.<br />Mejor <span className="text-accent">compañía.</span></h1><p>Hay cosas que empiezan con un café y terminan en un proyecto. Encuentra tu próximo punto de encuentro.</p><a href="#agenda" className="button button-primary">Explorar la agenda <Icon name="right" /></a><div className="event-types"><span>MEETUPS</span><span>WORKSHOPS</span><span>HACKATHONS</span></div></div><BuildPass event={featured} calendarUrl={calendarUrl} unavailable={unavailable} /></header>
+      <section aria-label="Publicar encuentros">
         {showForm ? (
-          <div className="mt-12 max-w-2xl border border-line p-6 sm:p-8">
-            <p className="mb-4 text-sm leading-6 text-muted">Only the team can add a date.</p>
+          <details className="founder-event-form" open>
+            <summary>Publicar un encuentro · Founders</summary>
+            <p className="mb-6 mt-4 text-sm leading-6 text-muted">Publica directamente en la agenda. Puedes añadir un enlace de Luma para las inscripciones.</p>
             {form}
-          </div>
-        ) : null}
+          </details>
+        ) : <p className="event-publish-hint">¿Eres founder? <Link href="/sign-in">Inicia sesión con GitHub</Link> para publicar un encuentro.</p>}
       </section>
-      <section className="border-t border-line">
-        <div className="mx-auto w-full max-w-6xl px-5 py-10">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">The board</p>
-          <h2 className="mt-3 text-3xl font-medium tracking-tight">Upcoming and possible.</h2>
-        </div>
-        <div className="mx-auto w-full max-w-6xl border-t border-line">{dates}</div>
+      <section className="agenda-section" id="agenda" aria-labelledby="agenda-title">
+        <div className="section-heading"><div><p className="eyebrow">UN ESPACIO PARA APRENDER Y CONSTRUIR</p><h2 id="agenda-title">Encuentra tu encuentro.</h2></div><span className="eyebrow">LA AGENDA DE LA COMUNIDAD</span></div>
+        {unavailable && <p role="status" className="demo-notice">No pudimos actualizar los eventos de Luma. {calendarUrl && <a href={calendarUrl} target="_blank" rel="noopener noreferrer">Consultar calendario ↗</a>}</p>}
+        {dates}
       </section>
-    </>
+      <div className="agenda-outro"><span className="crosshair" aria-hidden="true">+</span><p>Una conversación. Una idea. Un nuevo comienzo.<br /><strong>Nos vemos en el próximo encuentro.</strong></p></div>
+    </div>
   );
 }
 
-export function EventsBoard() {
+export function EventsBoard(props: BoardProps) {
   if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
+    const events = mergeEventRows(catalogEvents(undefined).map(toEventRow), props.external);
     return (
       <EventsLayout
+        featured={events.find((event) => !isPastEvent(event, props.now))}
+        calendarUrl={props.calendarUrl}
+        unavailable={props.unavailable}
         showForm={false}
         form={null}
-        dates={<Board events={catalogEvents(undefined)} canEdit={false} />}
+        dates={<Board events={events} canEdit={false} now={props.now} />}
       />
     );
   }
-  return <LiveBoard />;
+  return <EventListBoundary><LiveBoard {...props} /></EventListBoundary>;
 }

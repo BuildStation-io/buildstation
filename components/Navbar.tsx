@@ -1,53 +1,55 @@
+"use client";
+
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { AuthButtons } from "./AuthButtons";
-import { BrandMark } from "./BrandMark";
-import { MobileMenu } from "./MobileMenu";
-import { WhatsAppLink } from "./WhatsAppLink";
+import { usePathname } from "next/navigation";
+import { useClerk, useUser } from "@clerk/nextjs";
+import BrandLogo from "./BrandLogo";
+import JoinButton from "./JoinButton";
 
-const NAV_LINKS = [
-  { href: "/team", label: "Team" },
+const links = [
+  { href: "/team", label: "Equipo" },
+  { href: "/projects", label: "Open source" },
+  { href: "/events", label: "Encuentros" },
   { href: "/members", label: "Builders" },
-  { href: "/ideas", label: "Ideas" },
-  { href: "/events", label: "Events" },
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
-  { href: "/build-lab", label: "Build Lab" },
-] as const;
+];
 
-export function Navbar() {
+export default function Navbar() {
+  const pathname = usePathname();
+  const { isSignedIn } = useUser();
+  const { signOut } = useClerk();
+  const [menuPath, setMenuPath] = useState<string | null>(null);
+  const open = menuPath === pathname;
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  function close() { setMenuPath(null); }
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-line bg-background/80 backdrop-blur-sm">
-      <div className="relative mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
-        <Link
-          href="/"
-          data-goo-target
-          data-goo-color="#ffffff"
-          className="flex items-center gap-2.5 text-sm font-medium tracking-tight"
-        >
-          <BrandMark className="h-8 w-8" />
-          BuildStation
+    <header className="site-header" onKeyDown={(event) => {
+      if (event.key === "Escape" && open) { close(); toggleRef.current?.focus(); }
+    }}>
+      <div className="site-container nav-bar">
+        <Link href="/" className="brand" onClick={close} aria-label="BuildStation — Inicio">
+          <BrandLogo />
         </Link>
-        <nav className="hidden items-center gap-5 sm:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              data-goo-target
-              data-goo-color="#67e8f9"
-              className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/70 transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <WhatsAppLink
-            label=""
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[#25d366] transition-opacity hover:opacity-80"
-            iconClassName="h-4 w-4"
-          />
-          <AuthButtons />
+        <nav className="desktop-nav" aria-label="Navegación principal">
+          {links.map(({ href, label }) => <Link key={href} href={href} aria-current={pathname.startsWith(href) ? "page" : undefined}>{label}</Link>)}
         </nav>
-        <MobileMenu links={NAV_LINKS} />
+        <div className="desktop-account">
+          <JoinButton className="button button-small button-outline" />
+          {isSignedIn && <button className="signout" onClick={() => signOut({ redirectUrl: "/" })}>Salir</button>}
+        </div>
+        <button ref={toggleRef} className="menu-toggle" aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Cerrar menú" : "Abrir menú"} onClick={() => setMenuPath(open ? null : pathname)}>
+          <span className={open ? "menu-lines is-open" : "menu-lines"}><span /><span /></span>
+        </button>
       </div>
+      <nav id="mobile-nav" className="mobile-nav" hidden={!open} aria-label="Navegación móvil">
+        {links.map(({ href, label }) => <Link key={href} href={href} onClick={close} aria-current={pathname.startsWith(href) ? "page" : undefined}>{label}<span aria-hidden="true">↗</span></Link>)}
+        <Link href="/ideas" onClick={close}>Ideas <span aria-hidden="true">↗</span></Link>
+        <Link href="/blog" onClick={close}>Blog <span aria-hidden="true">↗</span></Link>
+        <Link href="/build-lab" onClick={close}>Build Lab <span aria-hidden="true">↗</span></Link>
+        <div onClick={close}><JoinButton />{isSignedIn && <button className="signout" onClick={() => signOut({ redirectUrl: "/" })}>Cerrar sesión</button>}</div>
+      </nav>
     </header>
   );
 }
