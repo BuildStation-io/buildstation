@@ -1,45 +1,24 @@
 import Link from "next/link";
-import { WhatsAppLink } from "./WhatsAppLink";
+import BrandLogo from "./BrandLogo";
+import Icon from "./Icon";
+import { getLumaConfig } from "@/lib/luma";
 
-export function Footer() {
+export default function Footer() {
+  const { calendarUrl } = getLumaConfig();
   return (
-    <footer className="mt-auto border-t border-line">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm font-medium">BuildStation</p>
-          <p className="mt-2 max-w-sm text-sm text-muted">
-            AI to improve infrastructure projects. Built in Lima, shipping for LatAm.
-          </p>
+    <footer className="site-footer">
+      <div className="site-container">
+        <div className="footer-main">
+          <div>
+            <Link href="/" className="brand"><BrandLogo /></Link>
+            <p>IA para transformar la infraestructura.<br />Desde Lima, construyendo para LatAm.</p>
+          </div>
+          <div className="footer-links">
+            <div><p className="eyebrow">EXPLORA</p><Link href="/#nosotros">Quiénes somos</Link><Link href="/team">Equipo</Link><Link href="/projects">Open source</Link><Link href="/events">Encuentros</Link><Link href="/members">Builders</Link><Link href="/ideas">Ideas</Link><Link href="/blog">Blog</Link><Link href="/build-lab">Build Lab</Link></div>
+            <div><p className="eyebrow">NOS ENCONTRAMOS</p>{calendarUrl ? <a href={calendarUrl} target="_blank" rel="noopener noreferrer">Luma <Icon name="arrow" /></a> : <Link href="/events">Nuestra agenda <Icon name="arrow" /></Link>}<Link href="/projects">Encuentra dónde contribuir <Icon name="arrow" /></Link></div>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
-          <Link href="/team" className="hover:text-foreground">
-            Team
-          </Link>
-          <Link href="/members" className="hover:text-foreground">
-            Builders
-          </Link>
-          <Link href="/ideas" className="hover:text-foreground">
-            Ideas
-          </Link>
-          <Link href="/events" className="hover:text-foreground">
-            Events
-          </Link>
-          <Link href="/projects" className="hover:text-foreground">
-            Projects
-          </Link>
-          <Link href="/blog" className="hover:text-foreground">
-            Blog
-          </Link>
-          <Link href="/build-lab" className="hover:text-foreground">
-            Build Lab
-          </Link>
-          <WhatsAppLink className="inline-flex items-center gap-2 hover:text-foreground" />
-        </div>
-      </div>
-      <div className="border-t border-line">
-        <p className="mx-auto max-w-6xl px-5 py-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
-          © {new Date().getFullYear()} BuildStation. Built fast, built well.
-        </p>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} BuildStation</span><span className="eyebrow">CONSTRUIDO EN PÚBLICO <span className="status-dot" /></span><a href="#site-content">Volver arriba ↑</a></div>
       </div>
     </footer>
   );
